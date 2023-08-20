@@ -1,0 +1,6 @@
+/API/appsettings.Development.json
+.idea
+bin/
+obj/
+*.sln.iml
+_ReSharper.*/
