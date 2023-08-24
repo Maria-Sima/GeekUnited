@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+
 namespace Core.Entities;
 
-public class Board:BaseEntity
+public class Board : BaseEntity
 {
     public string BoardName { get; set; }
     public string Description { get; set; }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
-public class ForumContext:DbContext
+public class ForumContext : DbContext
 {
     public ForumContext(DbContextOptions options) : base(options)
     {
@@ -11,6 +11,4 @@ public class ForumContext:DbContext
 
     public DbSet<Post> Posts { get; set; }
     public DbSet<Board> Boards { get; set; }
-    
-    
 }
