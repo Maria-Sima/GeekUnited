@@ -5,7 +5,7 @@ namespace Infrastructure.Data;
 
 public class ForumContext : DbContext
 {
-    public ForumContext(DbContextOptions options) : base(options)
+    public ForumContext(DbContextOptions<ForumContext> options) : base(options)
     {
     }
 

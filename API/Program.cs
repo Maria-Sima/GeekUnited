@@ -1,12 +1,6 @@
-using System;
-using System.Threading.Tasks;
 using API;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 public class Program
 {

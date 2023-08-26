@@ -1,10 +1,7 @@
 using API.Middleware;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace API;
 
@@ -20,9 +17,10 @@ public class Startup
     public void ConfigureDevelopmentServices(IServiceCollection services)
     {
         var connectionStringsChildren = _config.GetSection("ConnectionStrings").GetChildren();
-        Console.WriteLine("Here:");
-        connectionStringsChildren.ToList().ForEach(child => Console.WriteLine($"Key: {child.Key}, Value: {child.Value}"));
-        services.AddDbContext<ForumContext>(options => { options.UseSqlServer(_config.GetConnectionString("DefaultConnection")); });
+        var conn = new SqlConnection("");
+        services.AddDbContext<ForumContext>(options =>
+        {
+            options.UseSqlServer(conn); });
 
         ConfigureServices(services);
     }
