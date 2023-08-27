@@ -1,8 +1,9 @@
+using API.Extensions;
+using API.Helpers;
 using API.Middleware;
 using Infrastructure.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-
 namespace API;
 
 public class Startup
@@ -27,8 +28,12 @@ public class Startup
 
     private void ConfigureServices(IServiceCollection services)
     {
-        services.AddSwaggerGen();
+
+        services.AddAutoMapper(typeof(MappingProfiles));
         services.AddControllers();
+        services.AddServiceCollection();
+        services.AddIdentityServices(_config);
+        services.AddSwaggerDocumentation();
 
         services.AddCors(opt =>
         {
