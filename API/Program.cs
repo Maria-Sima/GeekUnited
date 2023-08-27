@@ -1,5 +1,6 @@
 using API;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 
 public class Program
@@ -17,6 +18,8 @@ public class Program
             {
                 var context = services.GetRequiredService<ForumContext>();
                 await context.Database.MigrateAsync();
+                var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+                await identityContext.Database.MigrateAsync();
             }
             catch (Exception ex)
             {

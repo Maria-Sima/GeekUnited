@@ -2,6 +2,7 @@ using API.Extensions;
 using API.Helpers;
 using API.Middleware;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 namespace API;
@@ -17,11 +18,18 @@ public class Startup
 
     public void ConfigureDevelopmentServices(IServiceCollection services)
     {
-        var connectionStringsChildren = _config.GetSection("ConnectionStrings").GetChildren();
+      
         var conn = new SqlConnection("");
         services.AddDbContext<ForumContext>(options =>
         {
-            options.UseSqlServer(conn); });
+            options.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
+            
+        });
+        services.AddDbContext<AppIdentityDbContext>(options =>
+        {
+            options.UseSqlServer(_config.GetConnectionString("IdentityConnection"));
+            
+        });
 
         ConfigureServices(services);
     }
