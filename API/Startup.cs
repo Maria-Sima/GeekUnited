@@ -18,14 +18,20 @@ public class Startup
 
     public void ConfigureDevelopmentServices(IServiceCollection services)
     {
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.Development.json").Build();
+
+        Console.WriteLine("_config!!!!"+_config["ConnectionStrings:DefaultConnection"]);
+        Console.WriteLine("_config!!!!"+config["ConnectionStrings:DefaultConnection"]);
         services.AddDbContext<ForumContext>(options =>
         {
-            options.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
+            options.UseSqlite("Data source=geeku.db");
             
         });
         services.AddDbContext<AppIdentityDbContext>(options =>
         {
-            options.UseSqlServer(_config.GetConnectionString("IdentityConnection"));
+            options.UseSqlite("Data source=identity.db");
             
         });
  

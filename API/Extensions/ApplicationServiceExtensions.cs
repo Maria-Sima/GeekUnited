@@ -14,6 +14,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddSingleton<FileService>();
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = actionContext => 

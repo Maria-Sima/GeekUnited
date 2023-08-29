@@ -74,7 +74,7 @@ public class AccountController:BaseApiController
 
             var user = new AppUser
             {
-                Username = registerDto.DisplayName,
+                DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email
             };
 
