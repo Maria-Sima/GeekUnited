@@ -7,7 +7,9 @@ public class ForumContext : DbContext
 {
     public ForumContext(DbContextOptions<ForumContext> options) : base(options)
     {
+        
     }
+
 
     public DbSet<Post> Posts { get; set; }
     public DbSet<Board> Boards { get; set; }

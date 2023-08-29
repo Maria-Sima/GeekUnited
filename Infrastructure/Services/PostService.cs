@@ -4,11 +4,10 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Helpers;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Infrastructure.Services;
 
-public class PostService
+public class PostService:IPostService
 {
     private readonly IGenericRepository<Post> _postsRepo;
     private readonly IMapper _mapper;
@@ -30,7 +29,7 @@ public class PostService
         return new Pagination<PostDto>(postSpecParams.PageIndex,postSpecParams.PageSize,totalPosts,data);
     }
     
-    public async Task<ActionResult<PostDto>> GetPost(int id)
+    public async Task<PostDto> GetPost(int id)
     {
         var spec = new PostWithBoardAndUserSpecifications(id);
 

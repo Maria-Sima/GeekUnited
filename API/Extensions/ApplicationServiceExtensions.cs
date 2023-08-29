@@ -1,6 +1,7 @@
 using API.Errors;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Extensions;
@@ -9,7 +10,10 @@ public static class ApplicationServiceExtensions
 {
     public static IServiceCollection AddServiceCollection(this IServiceCollection services)
     {
+        Console.WriteLine("!!!Gets here servCol");
         services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+        services.AddScoped<IPostService, PostService>();
+        services.AddScoped<ITokenService, TokenService>();
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = actionContext => 

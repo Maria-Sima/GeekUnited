@@ -11,15 +11,17 @@ public static class IdentityServiceExtensions
 {
     public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
     {
+        Console.WriteLine("!!!Gets here IdServ");
         ConfigureIdentityOptions(services);
         ConfigureIdentityStores(services);
         ConfigureJwtAuthentication(services, config);
-
+        Console.WriteLine("!!!Gets here");
         return services;
     }
 
     private static void ConfigureIdentityOptions(IServiceCollection services)
     {
+        Console.WriteLine("!!!Gets here IdOpt");
         services.AddIdentityCore<AppUser>(opt =>
         {
             opt.Password.RequireDigit = true;
@@ -33,6 +35,7 @@ public static class IdentityServiceExtensions
 
     private static void ConfigureIdentityStores(IServiceCollection services)
     {
+        Console.WriteLine("!!!Gets here IdStores");
         services.AddIdentity<AppUser, IdentityRole>()
             .AddEntityFrameworkStores<AppIdentityDbContext>()
             .AddSignInManager<SignInManager<AppUser>>();
@@ -40,6 +43,7 @@ public static class IdentityServiceExtensions
 
     private static void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration config)
     {
+        Console.WriteLine("!!!Gets here JWT");
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

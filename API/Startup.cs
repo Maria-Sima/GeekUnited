@@ -18,8 +18,6 @@ public class Startup
 
     public void ConfigureDevelopmentServices(IServiceCollection services)
     {
-      
-        var conn = new SqlConnection("");
         services.AddDbContext<ForumContext>(options =>
         {
             options.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
@@ -30,6 +28,7 @@ public class Startup
             options.UseSqlServer(_config.GetConnectionString("IdentityConnection"));
             
         });
+ 
 
         ConfigureServices(services);
     }
@@ -71,7 +70,6 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints.MapFallbackToController("Index", "Fallback");
         });
     }
 }
