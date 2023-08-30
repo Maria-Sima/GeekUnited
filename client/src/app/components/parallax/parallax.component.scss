@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@300;800&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Heebo", sans-serif;
+}
+
+div.parallax {
+  width: 100%;
+  min-height: 100vh;
+  background: url("https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/679f6254903719.596e6e1136ac2.gif");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+div.text-div {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+div.parallax-2 {
+  width: 100%;
+  min-height: 100vh;
+  background: url("https://i.pinimg.com/originals/73/f1/25/73f1250fe6b2da47c226381f9925adf4.gif");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+@media (max-width: 576px) {
+  div.parallax,
+  div.parallax-2 {
+    width: 100%;
+    position: relative;
+    min-height: 100vh;
+    background-position-x: center;
+    padding: 40px;
+  }
+}
