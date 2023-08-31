@@ -1,15 +1,14 @@
 using API.Dtos;
 using Core.Interfaces;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class FilesController:BaseApiController
+public class FilesController : BaseApiController
 {
-    private readonly FileService _fileService;
+    private readonly IFileService _fileService;
 
-    public FilesController(FileService fileService)
+    public FilesController(IFileService fileService)
     {
         _fileService = fileService;
     }
@@ -17,7 +16,7 @@ public class FilesController:BaseApiController
     [HttpGet]
     public async Task<ActionResult<List<BlobDto>>> ListAllBlobs()
     {
-        return Ok(_fileService.ListAsync());
+        return Ok(await _fileService.ListAsync());
     }
 
     [HttpPost]

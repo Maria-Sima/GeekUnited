@@ -7,7 +7,6 @@ public class ForumContext : DbContext
 {
     public ForumContext(DbContextOptions<ForumContext> options) : base(options)
     {
-        
     }
 
 

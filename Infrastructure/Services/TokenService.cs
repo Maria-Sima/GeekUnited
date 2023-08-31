@@ -8,10 +8,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Services;
 
-public class TokenService:ITokenService
+public class TokenService : ITokenService
 {
     private readonly IConfiguration _config;
     private readonly SymmetricSecurityKey _key;
+
     public TokenService(IConfiguration config)
     {
         _config = config;
@@ -22,8 +23,8 @@ public class TokenService:ITokenService
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName)
+            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(JwtRegisteredClaimNames.GivenName, user.UserName)
         };
 
         var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

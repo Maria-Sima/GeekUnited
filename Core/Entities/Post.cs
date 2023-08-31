@@ -6,7 +6,6 @@ public class Post : BaseEntity
     public string Description { get; set; }
     public string PictureUrl { get; set; }
     public Board Board { get; set; }
-
     public int BoardId { get; set; }
     public AppUser AppUser { get; set; }
     public int UserId { get; set; }

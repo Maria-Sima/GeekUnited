@@ -3,8 +3,8 @@ using API.Helpers;
 using API.Middleware;
 using Infrastructure.Data;
 using Infrastructure.Identity;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+
 namespace API;
 
 public class Startup
@@ -22,26 +22,17 @@ public class Startup
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.Development.json").Build();
 
-        Console.WriteLine("_config!!!!"+_config["ConnectionStrings:DefaultConnection"]);
-        Console.WriteLine("_config!!!!"+config["ConnectionStrings:DefaultConnection"]);
-        services.AddDbContext<ForumContext>(options =>
-        {
-            options.UseSqlite("Data source=geeku.db");
-            
-        });
-        services.AddDbContext<AppIdentityDbContext>(options =>
-        {
-            options.UseSqlite("Data source=identity.db");
-            
-        });
- 
+        Console.WriteLine("_config!!!!" + _config["ConnectionStrings:DefaultConnection"]);
+        Console.WriteLine("_config!!!!" + config["ConnectionStrings:DefaultConnection"]);
+        services.AddDbContext<ForumContext>(options => { options.UseSqlite("Data source=geeku.db"); });
+        services.AddDbContext<AppIdentityDbContext>(options => { options.UseSqlite("Data source=identity.db"); });
+
 
         ConfigureServices(services);
     }
 
     private void ConfigureServices(IServiceCollection services)
     {
-
         services.AddAutoMapper(typeof(MappingProfiles));
         services.AddControllers();
         services.AddServiceCollection();
@@ -73,9 +64,6 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }
