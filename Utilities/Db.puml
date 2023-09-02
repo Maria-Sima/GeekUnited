@@ -1,0 +1,41 @@
+@startuml
+class Post {
+  int id
+  string Title
+  string pictureUrl
+  string Description
+  AppUser AppUser
+  Board Board
+  List<Comments> comments
+}
+
+class Board{
+List<Post> posts
+string Description
+string Title
+List<AppUser> followers
+}
+
+class Comment{
+string Content
+AppUser AppUser
+Post post
+}
+
+class AppUser{
+string Username
+string profilephoto
+string email
+string password
+List<Post> posts
+List<Comment> comments
+List<Board> boardsToFollow
+}
+
+Post--*Comment
+AppUser-->Comment
+AppUser--*Post
+Board--*Post
+Board-->AppUser
+AppUser-->Board
+@enduml

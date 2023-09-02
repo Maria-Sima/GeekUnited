@@ -35,15 +35,15 @@ public class PostsController : BaseApiController
         return post;
     }
 
-    [HttpPost("add")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<PostDto>> AddPost([FromBody] PostForm postForm)
-    {
-        var post = await _postService.AddPost(postForm);
-
-        return Ok(post);
-    }
+    // [HttpPost("add")]
+    // [ProducesResponseType(StatusCodes.Status200OK)]
+    // [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    // public async Task<ActionResult<PostDto>> AddPost([FromBody] PostForm postForm)
+    // {
+    //     var post = await _postService.AddPost(postF);
+    //
+    //     return Ok(post);
+    // }
 
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]

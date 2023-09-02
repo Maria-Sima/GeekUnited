@@ -7,6 +7,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ParallaxComponent } from './components/parallax/parallax.component';
 import { ScrollGalleryComponent } from './components/scroll-gallery/scroll-gallery.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { AuthPrismComponent } from './components/auth-forms/auth-prism/auth-prism.component';
+import { PrismFaceComponent } from './components/auth-forms/prism-face/prism-face.component';
+import { SubmitSuccessComponent } from './components/auth-forms/submit-success/submit-success.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -14,11 +18,15 @@ import { FooterComponent } from './components/footer/footer.component';
     NavBarComponent,
     ParallaxComponent,
     ScrollGalleryComponent,
-    FooterComponent
+    FooterComponent,
+    AuthPrismComponent,
+    PrismFaceComponent,
+    SubmitSuccessComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

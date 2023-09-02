@@ -4,26 +4,21 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Helpers;
-using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services;
 
 public class PostService : IPostService
 {
-    private readonly IGenericRepository<Board> _boardRepo;
     private readonly IFileService _fileService;
+
     private readonly IMapper _mapper;
     private readonly IGenericRepository<Post> _postsRepo;
-    private readonly UserManager<AppUser> _userRepo;
 
-    public PostService(IGenericRepository<Post> postsRepo, IMapper mapper, IFileService fileService,
-        IGenericRepository<Board> boardRepo, UserManager<AppUser> userRepo)
+    public PostService(IGenericRepository<Post> postsRepo, IMapper mapper, IFileService fileService)
     {
         _postsRepo = postsRepo;
         _mapper = mapper;
         _fileService = fileService;
-        _boardRepo = boardRepo;
-        _userRepo = userRepo;
     }
 
     public async Task<Pagination<PostDto>> GetPosts(PostSpecParams postSpecParams)
@@ -46,11 +41,9 @@ public class PostService : IPostService
         return _mapper.Map<Post, PostDto>(post);
     }
 
-    public async Task<PostDto> AddPost(PostForm postForm)
+    public async Task<Post> AddPost(PostRequestDto postForm, AppUser user, Board board)
     {
         var blob = await _fileService.UploadAsync(postForm.Picture);
-        var user = await _userRepo.FindByIdAsync(postForm.UserId.ToString());
-        var board = await _boardRepo.GetByIdAsync(postForm.BoardId);
         var newPost = new Post
         {
             AppUser = user,
@@ -63,7 +56,7 @@ public class PostService : IPostService
         };
         _postsRepo.Add(newPost);
         _postsRepo.SaveChangesAsync();
-        return _mapper.Map<Post, PostDto>(newPost);
+        return newPost;
     }
 
     public async Task DeletePost(int id)
@@ -74,5 +67,16 @@ public class PostService : IPostService
             _postsRepo.Delete(postToDelete);
             _postsRepo.SaveChangesAsync();
         }
+    }
+
+    public async Task<Post> GetPostById(int id)
+    {
+        return await _postsRepo.GetByIdAsync(id);
+    }
+
+    public async Task AddCommentToPost(Post commentedPost, Comment comment)
+    {
+        commentedPost.Comments.Add(comment);
+        _postsRepo.SaveChangesAsync();
     }
 }

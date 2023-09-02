@@ -2,14 +2,15 @@ using API.Dtos;
 using API.Errors;
 using AutoMapper;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 public class AccountController : BaseApiController
 {
-    private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly IUserService _userService;
 
 
     public AccountController(IUserService userService, IMapper mapper)
@@ -18,28 +19,19 @@ public class AccountController : BaseApiController
         _mapper = mapper;
     }
 
-    // [Authorize]
-    // [HttpGet]
-    // public async Task<ActionResult<UserDto>> GetCurrentUser()
-    // {
-    //     var user = await _userManager.FindByEmailFromClaimsPrinciple(HttpContext.User);
-    //
-    //     return new UserDto
-    //     {
-    //         Email = user.Email,
-    //         Token = _tokenService.CreateToken(user),
-    //         DisplayName = user.UserName
-    //     };
-    // }
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    {
+        var user = _userService.GetCurrentUser(HttpContext.User);
+        return Ok(user);
+    }
 
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = _userService.Login(loginDto);
-        if (user==null)
-        { 
-            return Unauthorized(new ApiResponse(401));
-        }
+        if (user == null) return Unauthorized(new ApiResponse(401));
 
         return Ok(user);
     }
@@ -51,10 +43,7 @@ public class AccountController : BaseApiController
             return new BadRequestObjectResult(new ApiValidationErrorResponse
                 { Errors = new[] { "Email address is in use" } });
         var user = _userService.Register(registerDto);
-        if (user.IsCompletedSuccessfully)
-        {
-            return BadRequest(new ApiResponse(400));
-        }
+        if (user.IsCompletedSuccessfully) return BadRequest(new ApiResponse(400));
 
         return Ok(user);
     }

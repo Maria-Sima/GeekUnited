@@ -12,4 +12,5 @@ public class ForumContext : DbContext
 
     public DbSet<Post> Posts { get; set; }
     public DbSet<Board> Boards { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 }
