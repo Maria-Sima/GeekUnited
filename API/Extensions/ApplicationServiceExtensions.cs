@@ -10,13 +10,12 @@ public static class ApplicationServiceExtensions
 {
     public static IServiceCollection AddServiceCollection(this IServiceCollection services)
     {
-        Console.WriteLine("!!!Gets here servCol");
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        services.AddScoped<IPostService, PostService>();
+        services.AddScoped<IPostService, PostService>(); 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBoardService, BoardService>();
-        services.AddSingleton<FileService>();
+        services.AddScoped<IFileService, FileService>();
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = actionContext =>

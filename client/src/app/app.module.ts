@@ -8,9 +8,11 @@ import { ParallaxComponent } from './components/parallax/parallax.component';
 import { ScrollGalleryComponent } from './components/scroll-gallery/scroll-gallery.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { AuthPrismComponent } from './components/auth-forms/auth-prism/auth-prism.component';
-import { PrismFaceComponent } from './components/auth-forms/prism-face/prism-face.component';
 import { SubmitSuccessComponent } from './components/auth-forms/submit-success/submit-success.component';
 import {FormsModule} from "@angular/forms";
+import { AuthpageComponent } from './pages/authpage/authpage.component';
+import { HomeComponent } from './pages/home/home.component';
+import { TitleComponent } from './components/title/title.component';
 
 @NgModule({
   declarations: [
@@ -20,8 +22,10 @@ import {FormsModule} from "@angular/forms";
     ScrollGalleryComponent,
     FooterComponent,
     AuthPrismComponent,
-    PrismFaceComponent,
-    SubmitSuccessComponent
+    SubmitSuccessComponent,
+    AuthpageComponent,
+    HomeComponent,
+    TitleComponent
   ],
   imports: [
     BrowserModule,

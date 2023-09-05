@@ -35,12 +35,13 @@ public class BoardService : IBoardService
         return _boardRepo.GetByIdAsync(boardId);
     }
 
-    public async Task AddUsersToBoard(AppUser user, int boardId)
+    public async Task<Board> AddUsersToBoard(AppUser user, int boardId)
     {
         var board = await _boardRepo.GetByIdAsync(boardId);
         if (board == null) throw new Exception("Board doesnt exist");
 
         board.Subsccribers.Add(user);
         _boardRepo.SaveChangesAsync();
+        return board;
     }
 }

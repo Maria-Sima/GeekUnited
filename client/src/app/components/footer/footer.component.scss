@@ -1,7 +1,10 @@
 .footer {
-  position: relative;
+  position: fixed; /* Change to fixed */
+  bottom: 0; /* Stick to the bottom */
+  left: 0; /* Stick to the left */
+  right: 0; /* Stick to the right */
   background: #05b3a4;
-  min-height: 100px;
+  min-height: 0.5vh;
   padding: 20px 50px;
   display: flex;
   justify-content: center;

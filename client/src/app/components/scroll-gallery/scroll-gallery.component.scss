@@ -22,11 +22,11 @@ $h: 100vh;
 
     @include box-shadow(0% 0% 100% black inset);
 
-    @include filter(brightness(100%));
+    @include filter(brightness(50%));
     @include transition(-webkit-filter 0.5s);
 
     &:hover{
-      @include filter(brightness(130%));
+      @include filter(brightness(70%));
     }
   }
   .parallax_layer_1 {
@@ -54,6 +54,25 @@ $h: 100vh;
     background-size: 100% auto;
     @include transform(translateZ(-0.5vh) rotateZ(15deg));
     background-image: url("https://cdn.discordapp.com/attachments/854493844410073138/1111959267558297620/cropped-3840-2160-1053126.jpg");
+  }
+  .title {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .text {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: white;
+    text-align: center;
   }
   .parallax_layer_5{
     //outline: 0%;
