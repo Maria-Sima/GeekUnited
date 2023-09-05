@@ -9,16 +9,19 @@ namespace API;
 
 public class Startup
 {
-    private readonly IConfiguration _config;
+    private readonly IConfiguration _configuration;
 
-    public Startup(IConfiguration config)
+    public Startup(IConfiguration configuration)
     {
-        _config = config;
+        _configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.Development.json")
+            .Build();
     }
 
     public void ConfigureDevelopmentServices(IServiceCollection services)
     {
-        var config = new ConfigurationBuilder()
+      var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.Development.json").Build();
 
