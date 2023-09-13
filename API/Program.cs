@@ -1,39 +1,67 @@
 using API;
+using API.Extensions;
+using API.Helpers;
+using API.Middleware;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 
-public class Program
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<ForumContext>(opt =>
 {
-    public static async Task Main(string[] args)
-    {
-        var host = CreateHostBuilder(args).Build();
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddDbContext<AppIdentityDbContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
+    builder.Services.AddControllers();
+builder.Services.AddServiceCollection();
+builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddSwaggerDocumentation();
 
-        using (var scope = host.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-            var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("CorsPolicy",
+        policy => { policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"); });
+});
+var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
-            try
-            {
-                var context = services.GetRequiredService<ForumContext>();
-                await context.Database.MigrateAsync();
-                var identityContext = services.GetRequiredService<AppIdentityDbContext>();
-                await identityContext.Database.MigrateAsync();
-            }
-            catch (Exception ex)
-            {
-                var logger = loggerFactory.CreateLogger<Program>();
-                logger.LogError(ex, "An error occurred during migration");
-            }
-        }
+app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-        host.Run();
-    }
 
-    public static IHostBuilder CreateHostBuilder(string[] args)
-    {
-        return Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
-    }
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<ForumContext>();
+var logger = services.GetRequiredService<ILogger<Program>>();
+try
+{
+   // await context.Database.MigrateAsync();
+
 }
+catch (Exception e)
+{
+    logger.LogError(e, "Error during migration");
+    throw;
+}
+
+app.Run();

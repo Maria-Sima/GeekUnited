@@ -7,28 +7,15 @@
 
 
 .typing {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  //display: flex;
+  //align-items: center;
+  //justify-content: center;
   height: auto;
   color: white;
   font-family: "Open Sans", sans-serif;
   font-weight: 700;
-  font-size: 12vw;
-}
-
-#typing::after {
-  content: '|';
+  font-size: 9vw;
   position: relative;
-  right: 0;
-  animation: blink 1s step-end infinite;
 }
 
-@keyframes blink {
-  from, to {
-    color: transparent
-  }
-  50% {
-    color: yellow;
-  }
-}
+

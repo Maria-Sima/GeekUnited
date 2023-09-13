@@ -17,6 +17,7 @@ public class UserService : IUserService
     private readonly ITokenService _tokenService;
     private readonly UserManager<AppUser> _userManager;
 
+    
     public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
         ITokenService tokenService, IPostService postService, IGenericRepository<Comment> commentRepo,
         IBoardService boardService, IMapper mapper)

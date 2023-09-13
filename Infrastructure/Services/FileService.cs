@@ -17,8 +17,9 @@ public class FileService : IFileService
     public FileService(IConfiguration configuration)
     {
         _configuration = configuration;
-        var storageAccount = _configuration["AzureBlobStorage:storageAccount"];
-        var key = _configuration["AzureBlobStorage:key"];
+        var blobConfig = _configuration.GetSection("AzureBlobStorage");
+        var storageAccount = blobConfig["StorageAccount"];
+        var key = blobConfig["key"];
         var blobUri = $"https://{storageAccount}.blob.core.windows.net";
         var credential = new StorageSharedKeyCredential(storageAccount, key);
 

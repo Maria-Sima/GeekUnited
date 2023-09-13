@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {MatBottomSheet} from "@angular/material/bottom-sheet";
+import {AuthenthicatorComponent} from "../account/authenthicator/authenthicator.component";
 
 @Component({
   selector: 'app-home',
@@ -7,4 +9,11 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+
+  constructor(private authSheet:MatBottomSheet) {
+  }
+
+  onGetStarted(){
+    this.authSheet.open(AuthenthicatorComponent);
+  }
 }

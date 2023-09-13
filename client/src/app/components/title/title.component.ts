@@ -7,17 +7,21 @@ import {Component, OnInit} from '@angular/core';
 })
 export class TitleComponent implements OnInit {
   ngOnInit(): void {
-    // Place the JavaScript code here
-    const greeting:string[] = ['Bonjour', 'Hello', 'Buenos días', 'Guten Morgen'];
-    let currentGreetingIndex = 0;
-    let currentCharacterIndex = 0;
-    let isDeleting = false;
-    let isPaused = false;
-    let pauseEnd = 0;
 
-    function typeWriterEffect(): number {
-      const greetingElement = document.getElementById('typing');
+    const greeting:string[] = ['Geeku', 'Be geeky', 'Be social', 'Be you'];
+    let currentGreetingIndex: number = 0;
+    let currentCharacterIndex: number = 0;
+    let isDeleting: boolean = false;
+    let isPaused: boolean = false;
+    let pauseEnd: number = 0;
 
+    function typeWriterEffect():any {
+      const greetingElement:HTMLElement|null = document.getElementById('typing');
+
+      if (!greetingElement) {
+        console.error('Element with ID "typing" not found.');
+        return;
+      }
       if (isPaused && Date.now() > pauseEnd) {
         isPaused = false;
         if (isDeleting) {
