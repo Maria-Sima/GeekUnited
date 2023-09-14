@@ -1,6 +1,10 @@
 <mat-card class="card">
-  <mat-card-header>
-    <mat-card-title style="color: #f44336; ">Create Post </mat-card-title>
+  <mat-card-header >
+    <mat-card-title >
+      <mat-form-field appearance="fill" style="width: 40vh;">
+        <input #postTitle matInput placeholder="What's on your mind?" class="stretch-input " style="color: tomato; font-weight: bold;">
+      </mat-form-field>
+    </mat-card-title>
   </mat-card-header>
   <mat-form-field appearance="fill" class="textarea-container">
     <textarea #commentInput matInput placeholder="Type Message..."></textarea>
@@ -9,12 +13,12 @@
     <img id="post-preview-image"/>
   </div>
   <mat-card-actions align="end">
-    <button mat-flat-button >
+    <button mat-flat-button>
       <label for="photo-upload">
         <input #photoSelector (change)="onPhotoSelected(photoSelector)" id="photo-upload" type="file" accept="image/*"/>
         <mat-icon>insert_photo</mat-icon>
       </label>
     </button>
-    <button (click)="onPost(commentInput)" mat-flat-button color="warn">Post It</button>
+    <button mat-flat-button color="warn">Post It</button>
   </mat-card-actions>
 </mat-card>

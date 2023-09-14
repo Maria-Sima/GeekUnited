@@ -6,7 +6,7 @@
 <app-login *ngIf="isLoginState()"></app-login>
 <app-register *ngIf="isRegisterState()" ></app-register>
     <div class="" *ngIf="isForgotPasswordState()">
-      <input #resetEmail placeholder="Email" >
+      <app-form-input formControlName="email" [label]="'Email Address'" [type]="'email'"></app-form-input>
       <button  mat-flat-button color="warn">Send Email</button>
     </div>
     <mat-card-actions align="end">

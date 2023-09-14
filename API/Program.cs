@@ -55,7 +55,8 @@ var context = services.GetRequiredService<ForumContext>();
 var logger = services.GetRequiredService<ILogger<Program>>();
 try
 {
-   // await context.Database.MigrateAsync();
+   await context.Database.MigrateAsync();
+   
 
 }
 catch (Exception e)

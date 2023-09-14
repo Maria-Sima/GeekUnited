@@ -47,7 +47,7 @@ public class PostService : IPostService
         var newPost = new Post
         {
             AppUser = user,
-            UserId = postForm.UserId,
+            AppUserId = postForm.UserId,
             PictureUrl = blob.Blob.Uri,
             Board = board,
             BoardId = postForm.BoardId,

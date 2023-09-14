@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Core.Entities;
 using Core.Interfaces;
@@ -11,30 +12,33 @@ namespace Infrastructure.Services;
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _config;
-    private readonly SymmetricSecurityKey _key;
+    private readonly byte[] _keyBytes; // The 512-bit key
 
     public TokenService(IConfiguration config)
     {
         _config = config;
-        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
+        _keyBytes = GenerateRandomKey(64); // 64 bytes for a 512-bit key
     }
 
     public string CreateToken(AppUser user)
     {
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Email, user.Email),
-            new(JwtRegisteredClaimNames.GivenName, user.UserName)
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName)
         };
 
-        var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+        var creds = new SigningCredentials(
+            new SymmetricSecurityKey(_keyBytes),
+            SecurityAlgorithms.HmacSha512Signature
+        );
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddDays(7),
+            Expires = DateTime.UtcNow.AddHours(1), // Adjust expiration as needed
             SigningCredentials = creds,
-            Issuer = _config["Token:Issuer"]
+            Issuer = _config["Token:Issuer"], // Optionally, specify the audience
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -42,5 +46,15 @@ public class TokenService : ITokenService
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
         return tokenHandler.WriteToken(token);
+    }
+
+    private byte[] GenerateRandomKey(int length)
+    {
+        using (var rng = new RNGCryptoServiceProvider())
+        {
+            var keyBytes = new byte[length];
+            rng.GetBytes(keyBytes);
+            return keyBytes;
+        }
     }
 }

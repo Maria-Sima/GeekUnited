@@ -24,7 +24,7 @@ public class FileService : IFileService
         var credential = new StorageSharedKeyCredential(storageAccount, key);
 
         var blobServiceClient = new BlobServiceClient(new Uri(blobUri), credential);
-        _filesContainer = blobServiceClient.GetBlobContainerClient("files");
+        _filesContainer = blobServiceClient.GetBlobContainerClient("filesblob");
     }
 
     public async Task<List<BlobDto>> ListAsync()

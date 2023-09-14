@@ -1,6 +1,7 @@
 using API.Dtos;
 using API.Errors;
 using Core.Entities;
+using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,9 @@ namespace API.Controllers;
 
 public class PostsController : BaseApiController
 {
-    private readonly PostService _postService;
+    private readonly IPostService _postService;
 
-    public PostsController(PostService postService)
+    public PostsController(IPostService postService)
     {
         _postService = postService;
     }

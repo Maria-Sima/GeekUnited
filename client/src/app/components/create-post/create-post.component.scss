@@ -1,0 +1,32 @@
+#photo-upload{
+  display: none;
+}
+.card {
+  margin: 20px;
+  min-width: 20vw;
+}
+.textarea-container {
+  width: 100%;
+  min-height: 30vh;
+}
+
+.textarea-container textarea.mat-input-element {
+  font-size: 1.5em;
+  resize: none;
+}
+
+#post-preview{
+  text-align: right;
+  margin-top: 1em;
+
+
+  #post-preview-image{
+    object-fit: cover;
+    object-position: center;
+    width:150px;
+    height: 100px;
+    border-radius: 1em;
+    border: 1px dashed gray;
+  }
+
+}

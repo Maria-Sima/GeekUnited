@@ -8,7 +8,7 @@ public class PostWithFiltersForCountSpecification : BaseSpecification<Post>
         x =>
             string.IsNullOrEmpty(postSpecParams.Search) || x.Title.ToLower().Contains(postSpecParams.Search) ||
             ((!postSpecParams.BoardId.HasValue || x.BoardId == postSpecParams.BoardId) &&
-             (string.IsNullOrEmpty(postSpecParams.Search) || x.UserId == postSpecParams.UserId))
+             (string.IsNullOrEmpty(postSpecParams.Search) || x.AppUserId == postSpecParams.UserId))
     )
     {
     }

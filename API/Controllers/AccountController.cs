@@ -39,6 +39,7 @@ public class AccountController : BaseApiController
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
+        Console.WriteLine("register vale"+ registerDto);
         if ( _userService.CheckEmailExistsAsync(registerDto.Email).Result)
             return new BadRequestObjectResult(new ApiValidationErrorResponse
                 { Errors = new[] { "Email address is in use" } });

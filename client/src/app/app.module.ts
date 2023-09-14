@@ -22,6 +22,11 @@ import {LoginComponent} from "./pages/account/login/login.component";
 import {RegisterComponent} from "./pages/account/register/register.component";
 import {HttpClientModule} from "@angular/common/http";
 import { CreatePostComponent } from './components/create-post/create-post.component';
+import { PostFeedComponent } from './pages/post-feed/post-feed.component';
+import { PostComponent } from './components/post/post.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ReplyComponent } from './components/reply/reply.component';
+import { EmailVerificationComponent } from './pages/email-verification/email-verification.component';
 
 
 
@@ -36,7 +41,12 @@ LoginComponent,
     HomeComponent,
     TitleComponent,
     AuthenthicatorComponent,
-    CreatePostComponent
+    CreatePostComponent,
+    PostFeedComponent,
+    PostComponent,
+    ProfileComponent,
+    ReplyComponent,
+    EmailVerificationComponent
   ],
   imports: [
     BrowserModule,

@@ -61,12 +61,15 @@ public class UserService : IUserService
 
     public async Task<UserDto> Register(RegisterDto registerDto)
     {
+        Console.WriteLine(registerDto);
         var user = new AppUser
         {
             DisplayName = registerDto.DisplayName,
-            Email = registerDto.Email
+            UserName = registerDto.DisplayName,
+            Email = registerDto.Email,
+            Password = registerDto.Password
         };
-
+        Console.WriteLine("!!"+user);
         await _userManager.CreateAsync(user, registerDto.Password);
 
 

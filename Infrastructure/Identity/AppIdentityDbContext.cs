@@ -1,4 +1,5 @@
 using Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,5 +14,8 @@ public class AppIdentityDbContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<AppUser>()
+            .ToTable("AppUser", "dbo").Property(p => p.Id).HasColumnName("Id");
     }
-}
+    }

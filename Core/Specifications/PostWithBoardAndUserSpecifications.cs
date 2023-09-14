@@ -7,7 +7,7 @@ public class PostWithBoardAndUserSpecifications : BaseSpecification<Post>
     public PostWithBoardAndUserSpecifications(PostSpecParams postParams) : base(x =>
         (string.IsNullOrEmpty(postParams.Search) || x.Title.ToLower().Contains(postParams.Search)) &&
         (!postParams.BoardId.HasValue || x.BoardId == postParams.BoardId == postParams.BoardId.HasValue) &&
-        (string.IsNullOrEmpty(postParams.UserId) || x.UserId == postParams.UserId)
+        (string.IsNullOrEmpty(postParams.UserId) || x.AppUserId == postParams.UserId)
     )
     {
         AddInclude(x => x.Board);

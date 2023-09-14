@@ -8,7 +8,6 @@ public class Post : BaseEntity
     public Board Board { get; set; }
     public int BoardId { get; set; }
     public AppUser AppUser { get; set; }
-    public string UserId { get; set; }
-
+    public string AppUserId { get; set; }
     public List<Comment> Comments { get; set; }
 }
