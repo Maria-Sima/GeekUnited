@@ -3,7 +3,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
-using Infrastructure.Helpers;
+using Utilities.Helpers;
 
 namespace Infrastructure.Services;
 

@@ -1,0 +1,61 @@
+<app-profile-header
+  [accountId]="communityDetails.createdBy.id"
+  [authUserId]="user?.id || ''"
+  [bio]="communityDetails.bio"
+  [imgUrl]="communityDetails.image"
+  [name]="communityDetails.name"
+  [type]="'Community'"
+  [username]="communityDetails.username"
+></app-profile-header>
+
+<div class="mt-9">
+  <app-tabs [defaultValue]="'threads'" class="w-full">
+    <app-tabs-list class="tab">
+      <app-tab-trigger *ngFor="let tab of communityTabs" [value]="tab.value" class="tab">
+        <app-image
+          [alt]="tab.label"
+          [height]="24"
+          [src]="tab.icon"
+          [width]="24"
+          class="object-contain"
+        ></app-image>
+        <p class="max-sm:hidden">{{ tab.label }}</p>
+
+        <ng-container *ngIf="tab.label === 'Threads'">
+          <p
+            class="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2"
+          >{{ communityDetails.threads.length }}</p>
+        </ng-container>
+      </app-tab-trigger>
+    </app-tabs-list>
+
+    <app-tabs-content [value]="'threads'" class="w-full text-light-1">
+      <app-threads-tab
+        [accountId]="communityDetails._id"
+        [accountType]="'Community'"
+        [currentUserId]="user?.id || ''"
+      ></app-threads-tab>
+    </app-tabs-content>
+
+    <app-tabs-content [value]="'members'" class="mt-9 w-full text-light-1">
+      <section class="mt-9 flex flex-col gap-10">
+        <app-user-card
+          *ngFor="let member of communityDetails.members"
+          [id]="member.id"
+          [imgUrl]="member.image"
+          [name]="member.name"
+          [personType]="'User'"
+          [username]="member.username"
+        ></app-user-card>
+      </section>
+    </app-tabs-content>
+
+    <app-tabs-content [value]="'requests'" class="w-full text-light-1">
+      <app-threads-tab
+        [accountId]="communityDetails._id"
+        [accountType]="'Community'"
+        [currentUserId]="user?.id || ''"
+      ></app-threads-tab>
+    </app-tabs-content>
+  </app-tabs>
+</div>

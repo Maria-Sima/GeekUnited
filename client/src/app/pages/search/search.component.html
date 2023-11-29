@@ -1,0 +1,29 @@
+<section>
+  <h1 class='head-text mb-10'>Search</h1>
+
+  <app-searchbar routeType='search'></app-searchbar>
+
+  <div class='mt-14 flex flex-col gap-9'>
+    <ng-container *ngIf='result?.users.length === 0; else showUsers'>
+      <p class='no-result'>No Result</p>
+    </ng-container>
+    <ng-template #showUsers>
+      <ng-container *ngFor='let person of result?.users'>
+        <app-user-card
+          [id]='person.id'
+          [imgUrl]='person.image'
+          [key]='person.id'
+          [name]='person.name'
+          [username]='person.username'
+          personType='User'
+        ></app-user-card>
+      </ng-container>
+    </ng-template>
+  </div>
+
+  <app-pagination
+    [isNext]='result?.isNext'
+    [pageNumber]='searchParams?.page ? +searchParams.page : 1'
+    [path]='"search"'
+  ></app-pagination>
+</section>

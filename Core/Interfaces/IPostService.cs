@@ -1,7 +1,7 @@
 using API.Dtos;
 using Core.Entities;
 using Core.Specifications;
-using Infrastructure.Helpers;
+using Utilities.Helpers;
 
 namespace Core.Interfaces;
 

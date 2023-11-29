@@ -1,0 +1,15 @@
+<h1 class="head-text">Activity</h1>
+
+<section class="mt-10 flex flex-col gap-5">
+  <ng-container *ngIf="activity.length > 0; else noActivity">
+    <div (click)="redirectToThread(activityItem.parentId)" *ngFor="let activityItem of activity" class="activity-card">
+      <img [src]="activityItem.author.image" alt="user_logo" class="rounded-full object-cover" height="20" width="20">
+      <p class="!text-small-regular text-light-1">
+        <span class="mr-1 text-primary-500">{{ activityItem.author.name }}</span> replied to your thread
+      </p>
+    </div>
+  </ng-container>
+  <ng-template #noActivity>
+    <p class="!text-base-regular text-light-3">No activity yet</p>
+  </ng-template>
+</section>
