@@ -1,0 +1,9 @@
+<div class="pagination">
+  <button (click)="handleNavigation('prev')" [disabled]="pageNumber === 1" class="text-small-regular text-light-2">
+    Prev
+  </button>
+  <p class="text-small-semibold text-light-1">{{ pageNumber }}</p>
+  <button (click)="handleNavigation('next')" [disabled]="!isNext" class="text-small-regular text-light-2">
+    Next
+  </button>
+</div>

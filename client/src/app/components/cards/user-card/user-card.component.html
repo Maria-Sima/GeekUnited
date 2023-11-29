@@ -1,0 +1,14 @@
+<article class="user-card">
+  <div class="user-card_avatar">
+    <div class="relative h-12 w-12">
+      <img [src]="imgUrl" alt="user_logo" class="rounded-full object-cover"/>
+    </div>
+
+    <div class="flex-1 text-ellipsis">
+      <h4 class="text-base-semibold text-light-1">{{ name }}</h4>
+      <p class="text-small-medium text-gray-1">@{{ username }}</p>
+    </div>
+  </div>
+
+  <button (click)="navigateToProfile()" class="user-card_btn">View</button>
+</article>

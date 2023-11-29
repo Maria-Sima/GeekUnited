@@ -1,0 +1,44 @@
+<article class='community-card'>
+  <div class='flex flex-wrap items-center gap-3'>
+    <a [routerLink]="'/communities/' + id" class='relative h-12 w-12'>
+      <img
+        [src]="imgUrl"
+        alt='community_logo'
+        class='rounded-full object-cover'
+      />
+    </a>
+
+    <div>
+      <a [routerLink]="'/communities/' + id">
+        <h4 class='text-base-semibold text-light-1'>{{ name }}</h4>
+      </a>
+      <p class='text-small-medium text-gray-1'>@{{ username }}</p>
+    </div>
+  </div>
+
+  <p class='mt-4 text-subtle-medium text-gray-1'>{{ bio }}</p>
+
+  <div class='mt-5 flex flex-wrap items-center justify-between gap-3'>
+    <a [routerLink]="'/communities/' + id">
+      <button class='community-card_btn' mat-button size='sm'>
+        View
+      </button>
+    </a>
+
+    <div *ngIf="members.length > 0" class='flex items-center'>
+      <ng-container *ngFor="let member of members; let i = index">
+        <img
+          [class]="i !== 0 ? '-ml-2' : '' + ' rounded-full object-cover'"
+          [src]="member.image"
+          alt='user_{{ i }}'
+          height='28'
+          width='28'
+        />
+      </ng-container>
+
+      <p *ngIf="members.length > 3" class='ml-1 text-subtle-medium text-gray-1'>
+        {{ members.length }}+ Users
+      </p>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,16 @@
+<form
+  (ngSubmit)="onSubmit()"
+  [formGroup]="postThreadForm"
+  class="mt-10 flex flex-col justify-start gap-10"
+>
+  <div class="flex w-full flex-col gap-3">
+    <label class="text-base-semibold text-light-2">Content</label>
+    <textarea
+      class="no-focus border border-dark-4 bg-dark-3 text-light-1"
+      formControlName="thread"
+      rows="15"
+    ></textarea>l
+  </div>
+
+  <button class="bg-primary-500" type="submit">Post Thread</button>
+</form>
