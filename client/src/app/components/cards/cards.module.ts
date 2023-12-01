@@ -9,6 +9,6 @@ import { FormsComponentsModule } from '../forms/forms-components.module';
 @NgModule({
   declarations: [UserCardComponent, ThreadsCardComponent, ComunityCardComponent],
   imports: [CommonModule, RouterLink, FormsComponentsModule],
-  exports: [ComunityCardComponent],
+  exports: [ComunityCardComponent, ThreadsCardComponent, UserCardComponent],
 })
 export class CardsModule {}

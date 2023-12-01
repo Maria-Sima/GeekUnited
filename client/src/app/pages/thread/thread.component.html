@@ -1,6 +1,6 @@
 <section class='relative'>
   <div>
-    <app-thread-card
+    <app-threads-card
       [author]='thread.author'
       [comments]='thread.children'
       [community]='thread.community'
@@ -9,7 +9,7 @@
       [currentUserId]='user.id'
       [id]='thread._id'
       [parentId]='thread.parentId'
-    ></app-thread-card>
+    ></app-threads-card>
   </div>
 
   <div class='mt-7'>
@@ -22,18 +22,17 @@
 
   <div class='mt-10'>
     <ng-container *ngFor='let childItem of thread.children'>
-      <app-thread-card
-        [author]='childItem.author'
-        [comments]='childItem.children'
-        [community]='childItem.community'
-        [content]='childItem.text'
-        [createdAt]='childItem.createdAt'
-        [currentUserId]='user.id'
-        [id]='childItem._id'
-        [isComment]='true'
-        [key]='childItem._id'
-        [parentId]='childItem.parentId'
-      ></app-thread-card>
+      <app-threads-card [author]='childItem.author'
+                        [comments]='childItem.children'
+                        [community]='childItem.community'
+                        [content]='childItem.text'
+                        [createdAt]='childItem.createdAt'
+                        [currentUserId]='user.id'
+                        [id]='childItem._id'
+                        [isComment]='true'
+                        [key]='childItem._id'
+                        [parentId]='childItem.parentId'
+      ></app-threads-card>
     </ng-container>
   </div>
 </section>
