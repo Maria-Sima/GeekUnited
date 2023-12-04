@@ -4,12 +4,14 @@ namespace Core.Specifications;
 
 public class PostWithFiltersForCountSpecification : BaseSpecification<Post>
 {
-    public PostWithFiltersForCountSpecification(PostSpecParams postSpecParams) : base(
-        x =>
-            string.IsNullOrEmpty(postSpecParams.Search) || x.Title.ToLower().Contains(postSpecParams.Search) ||
-            ((!postSpecParams.BoardId.HasValue || x.BoardId == postSpecParams.BoardId) &&
-             (string.IsNullOrEmpty(postSpecParams.Search) || x.AppUserId == postSpecParams.UserId))
-    )
-    {
-    }
+    public PostWithFiltersForCountSpecification(PostSpecParams postSpecParams)
+        : base(
+            x =>
+                string.IsNullOrEmpty(postSpecParams.Search)
+                || x.Text.ToLower().Contains(postSpecParams.Search)
+                || (
+                    (string.IsNullOrEmpty(postSpecParams.BoardId) || x.Board == postSpecParams.BoardId)
+                    && (string.IsNullOrEmpty(postSpecParams.Search) || x.Author == postSpecParams.UserId)
+                )
+        ) { }
 }

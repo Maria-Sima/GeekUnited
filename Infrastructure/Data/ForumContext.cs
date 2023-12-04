@@ -1,16 +1,20 @@
-using Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace Infrastructure.Data;
 
 public class ForumContext : DbContext
 {
-    public ForumContext(DbContextOptions<ForumContext> options) : base(options)
+    private readonly IMongoDatabase _database;
+
+    public ForumContext(string connectionString, string databaseName)
     {
+        var client = new MongoClient(connectionString);
+        _database = client.GetDatabase(databaseName);
     }
 
-
-    public DbSet<Post> Posts { get; set; }
-    public DbSet<Board> Boards { get; set; }
-    public DbSet<Comment> Comments { get; set; }
+    public IMongoCollection<T> GetCollection<T>(string collectionName)
+    {
+        return _database.GetCollection<T>(collectionName);
+    }
 }

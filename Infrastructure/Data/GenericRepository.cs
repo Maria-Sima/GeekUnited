@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+public class GenericRepository<T> : IGenericRepository<T>
+    where T : BaseEntity
 {
     private readonly ForumContext _context;
-
 
     public GenericRepository(ForumContext context)
     {

@@ -17,7 +17,6 @@ public class PostsController : BaseApiController
         _postService = postService;
     }
 
-
     [HttpGet("all")]
     public async Task<ActionResult<IReadOnlyList<Post>>> GetPosts([FromQuery] PostSpecParams postParams)
     {
@@ -31,7 +30,8 @@ public class PostsController : BaseApiController
     {
         var post = await _postService.GetPost(id);
 
-        if (post == null) return NotFound(new ApiResponse(404));
+        if (post == null)
+            return NotFound(new ApiResponse(404));
 
         return post;
     }

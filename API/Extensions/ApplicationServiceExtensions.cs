@@ -11,7 +11,7 @@ public static class ApplicationServiceExtensions
     public static IServiceCollection AddServiceCollection(this IServiceCollection services)
     {
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        services.AddScoped<IPostService, PostService>(); 
+        services.AddScoped<IPostService, PostService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBoardService, BoardService>();
@@ -20,15 +20,14 @@ public static class ApplicationServiceExtensions
         {
             options.InvalidModelStateResponseFactory = actionContext =>
             {
-                var errors = actionContext.ModelState
+                var errors = actionContext
+                    .ModelState
                     .Where(e => e.Value.Errors.Count > 0)
                     .SelectMany(x => x.Value.Errors)
-                    .Select(x => x.ErrorMessage).ToArray();
+                    .Select(x => x.ErrorMessage)
+                    .ToArray();
 
-                var errorResponse = new ApiValidationErrorResponse
-                {
-                    Errors = errors
-                };
+                var errorResponse = new ApiValidationErrorResponse { Errors = errors };
 
                 return new BadRequestObjectResult(errorResponse);
             };

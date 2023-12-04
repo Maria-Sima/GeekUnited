@@ -14,7 +14,7 @@ public class PostSpecParams
         set => _pageSize = value > MaxPageSize ? MaxPageSize : value;
     }
 
-    public int? BoardId { get; set; }
+    public string? BoardId { get; set; }
     public string UserId { get; set; }
     public string Sort { get; set; }
 

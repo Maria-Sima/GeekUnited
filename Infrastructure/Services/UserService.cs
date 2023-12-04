@@ -10,68 +10,46 @@ namespace Infrastructure.Services;
 public class UserService : IUserService
 {
     private readonly IBoardService _boardService;
-    private readonly IGenericRepository<Comment> _commentRepo;
     private readonly IMapper _mapper;
     private readonly IPostService _postService;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly ITokenService _tokenService;
     private readonly UserManager<AppUser> _userManager;
 
-    
-    public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-        ITokenService tokenService, IPostService postService, IGenericRepository<Comment> commentRepo,
-        IBoardService boardService, IMapper mapper)
+    public UserService(
+        UserManager<AppUser> userManager,
+        SignInManager<AppUser> signInManager,
+        ITokenService tokenService,
+        IPostService postService,
+        IBoardService boardService,
+        IMapper mapper
+    )
     {
         _tokenService = tokenService;
         _postService = postService;
-        _commentRepo = commentRepo;
         _boardService = boardService;
         _mapper = mapper;
         _signInManager = signInManager;
         _userManager = userManager;
     }
 
-    public async Task<UserDto> GetUserById(int id)
+    public Task<List<Post>> GetActivity(string userId)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
-
-        return new UserDto
-        {
-            Email = user.Email,
-            Token = _tokenService.CreateToken(user),
-            DisplayName = user.UserName
-        };
+        throw new NotImplementedException();
     }
-
-
-    public async Task<UserDto> Login(LoginDto loginDto)
-    {
-        var user = await _userManager.FindByEmailAsync(loginDto.Email);
-        if (user == null) throw new Exception("Invalid email");
-        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-
-
-        return new UserDto
-        {
-            Email = user.Email,
-            Token = _tokenService.CreateToken(user),
-            DisplayName = user.UserName
-        };
-    }
+    
 
     public async Task<UserDto> Register(RegisterDto registerDto)
     {
-        Console.WriteLine(registerDto);
         var user = new AppUser
         {
-            DisplayName = registerDto.DisplayName,
+            Name = registerDto.DisplayName,
             UserName = registerDto.DisplayName,
             Email = registerDto.Email,
             Password = registerDto.Password
         };
-        Console.WriteLine("!!"+user);
+        Console.WriteLine("!!" + user);
         await _userManager.CreateAsync(user, registerDto.Password);
-
 
         return new UserDto
         {
@@ -101,47 +79,83 @@ public class UserService : IUserService
     public async Task<PostDto> AddPost(PostRequestDto postForm)
     {
         var user = await _userManager.FindByIdAsync(postForm.UserId);
-        if (user == null) throw new Exception("User not found");
+        if (user == null)
+            throw new Exception("User not found");
 
         var board = await _boardService.GetBoardById(postForm.BoardId);
-        if (board == null) throw new Exception("Board not found");
+        if (board == null)
+            throw new Exception("Board not found");
 
         var post = await _postService.AddPost(postForm, user, board);
 
         await _boardService.AddPostToBoard(post, board);
 
-        user.Posts.Add(post);
+        user.Posts.Add((string)post);
         await _userManager.UpdateAsync(user);
 
         return _mapper.Map<Post, PostDto>(post);
     }
 
-
-    public async Task<CommentDto> AddComment(CommentRequestDto comm)
+    public Task<CommentDto> AddComment(CommentRequestDto comm)
     {
-        var user = await _userManager.FindByIdAsync(comm.UserId);
-        var post = await _postService.GetPostById(comm.PostId);
-        var newComment = new Comment
-        {
-            User = user,
-            UserId = comm.UserId,
-            PostId = comm.PostId,
-            Post = post,
-            CommentText = comm.Text
-        };
-        _commentRepo.Add(newComment);
-        user.Comments.Add(newComment);
-        await _postService.AddCommentToPost(post, newComment);
-        return _mapper.Map<Comment, CommentDto>(newComment);
+        throw new NotImplementedException();
+    }
+
+    public Task SubscribeToBoard(string userId, string boardId)
+    {
+        throw new NotImplementedException();
     }
 
 
-    public async Task SubscribeToBoard(string userId, int boardId)
+    public async Task AddBoardToMember(string userId, string boardId)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        var board = await _boardService.GetBoardById(boardId);
-        user.Boards.Add(board);
+        user.Boards.Add(boardId);
         await _userManager.UpdateAsync(user);
-        await _boardService.AddUsersToBoard(user, boardId);
+    }
+
+    public async Task<AppUser> GetUserById(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+
+        return user;
+    }
+
+    public Task<List<Post>> GerUserPosts(string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<AppUser>> GetUsers()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task AddBoardCreatedByUser(string boardCreatedByUserId, AppUser user)
+    {
+        user.Boards.Add(boardCreatedByUserId);
+        await _userManager.UpdateAsync(user);
+    }
+
+    public async Task RemoveBoardFromUser(string boardId, string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        user.Boards.Remove(boardId);
+        await _userManager.UpdateAsync(user);
+    }
+
+    public async Task<UserDto> Login(LoginDto loginDto)
+    {
+        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        if (user == null)
+            throw new Exception("Invalid email");
+        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+        return new UserDto
+        {
+            Email = user.Email,
+            Token = _tokenService.CreateToken(user),
+            DisplayName = user.UserName
+        };
     }
 }

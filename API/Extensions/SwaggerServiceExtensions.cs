@@ -17,11 +17,7 @@ public static class SwaggerServiceExtensions
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
                 Scheme = "bearer",
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
             };
 
             c.AddSecurityDefinition("Bearer", securitySchema);
@@ -37,8 +33,7 @@ public static class SwaggerServiceExtensions
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
-            c
-                .SwaggerEndpoint("/swagger/v1/swagger.json", "GeekUnite API v1");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "GeekUnite API v1");
         });
 
         return app;

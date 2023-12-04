@@ -36,7 +36,8 @@ public static class IdentityServiceExtensions
     private static void ConfigureIdentityStores(IServiceCollection services)
     {
         Console.WriteLine("!!!Gets here IdStores");
-        services.AddIdentity<AppUser, IdentityRole>()
+        services
+            .AddIdentity<AppUser, IdentityRole>()
             .AddEntityFrameworkStores<AppIdentityDbContext>()
             .AddSignInManager<SignInManager<AppUser>>();
     }
@@ -44,7 +45,8 @@ public static class IdentityServiceExtensions
     private static void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration config)
     {
         Console.WriteLine("!!!Gets here JWT");
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters

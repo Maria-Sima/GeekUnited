@@ -28,10 +28,7 @@ public class TokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.GivenName, user.UserName)
         };
 
-        var creds = new SigningCredentials(
-            new SymmetricSecurityKey(_keyBytes),
-            SecurityAlgorithms.HmacSha512Signature
-        );
+        var creds = new SigningCredentials(new SymmetricSecurityKey(_keyBytes), SecurityAlgorithms.HmacSha512Signature);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

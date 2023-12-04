@@ -8,8 +8,6 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMap<Post, PostDto>()
-            .ForMember(d => d.Board, o => o.MapFrom(s => s.Board.BoardName))
-            .ForMember(d => d.User, o => o.MapFrom(s => s.AppUser.DisplayName));
+        CreateMap<Post, PostDto>();
     }
 }

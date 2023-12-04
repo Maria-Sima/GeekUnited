@@ -11,7 +11,6 @@ public class FileService : IFileService
 {
     private readonly IConfiguration _configuration;
 
-
     private readonly BlobContainerClient _filesContainer;
 
     public FileService(IConfiguration configuration)
@@ -37,17 +36,18 @@ public class FileService : IFileService
             var name = file.Name;
             var fullUri = $"{uri}/{name}";
 
-            files.Add(new BlobDto
-            {
-                Uri = fullUri,
-                Name = name,
-                ContentType = file.Properties.ContentType
-            });
+            files.Add(
+                new BlobDto
+                {
+                    Uri = fullUri,
+                    Name = name,
+                    ContentType = file.Properties.ContentType
+                }
+            );
         }
 
         return files;
     }
-
 
     public async Task<BlobResponseDto> UploadAsync(IFormFile blob)
     {
@@ -80,7 +80,12 @@ public class FileService : IFileService
 
             var name = blobFileName;
             var contentType = content.Value.Details.ContentType;
-            return new BlobDto { Content = blobContent, Name = name, ContentType = contentType };
+            return new BlobDto
+            {
+                Content = blobContent,
+                Name = name,
+                ContentType = contentType
+            };
         }
 
         return null;

@@ -14,5 +14,5 @@ public interface IPostService
 
     public Task<Post> GetPostById(int id);
 
-    public Task AddCommentToPost(Post post, Comment comment);
+    public Task AddCommentToPost(Post parentPost,Post commentPost);
 }

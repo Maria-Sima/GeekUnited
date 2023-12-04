@@ -1,5 +1,3 @@
 namespace Infrastructure.Services;
 
-public class ResponseCacheService
-{
-}
+public class ResponseCacheService { }
