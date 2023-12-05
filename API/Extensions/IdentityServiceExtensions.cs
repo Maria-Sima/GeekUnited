@@ -1,6 +1,7 @@
 using System.Text;
+using API.Config;
+using AspNetCore.Identity.MongoDbCore.Models;
 using Core.Entities;
-using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -13,7 +14,7 @@ public static class IdentityServiceExtensions
     {
         Console.WriteLine("!!!Gets here IdServ");
         ConfigureIdentityOptions(services);
-        ConfigureIdentityStores(services);
+        ConfigureIdentityStores(services, config);
         ConfigureJwtAuthentication(services, config);
         Console.WriteLine("!!!Gets here");
         return services;
@@ -21,7 +22,6 @@ public static class IdentityServiceExtensions
 
     private static void ConfigureIdentityOptions(IServiceCollection services)
     {
-        Console.WriteLine("!!!Gets here IdOpt");
         services.AddIdentityCore<AppUser>(opt =>
         {
             opt.Password.RequireDigit = true;
@@ -33,18 +33,19 @@ public static class IdentityServiceExtensions
         });
     }
 
-    private static void ConfigureIdentityStores(IServiceCollection services)
+    private static void ConfigureIdentityStores(IServiceCollection services, IConfiguration config)
     {
-        Console.WriteLine("!!!Gets here IdStores");
+        var mongoDbSettings = config.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
         services
-            .AddIdentity<AppUser, IdentityRole>()
-            .AddEntityFrameworkStores<AppIdentityDbContext>()
-            .AddSignInManager<SignInManager<AppUser>>();
+            .AddIdentity<AppUser, MongoIdentityRole>()
+            .AddMongoDbStores<AppUser, MongoIdentityRole, Guid>(
+                mongoDbSettings.ConnectionString,
+                mongoDbSettings.Name
+            ).AddSignInManager<SignInManager<AppUser>>();
     }
 
     private static void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration config)
     {
-        Console.WriteLine("!!!Gets here JWT");
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

@@ -4,18 +4,18 @@ namespace Core.Specifications;
 
 public class PostWithBoardAndUserSpecifications : BaseSpecification<Post>
 {
-    public PostWithBoardAndUserSpecifications(PostSpecParams postParams)
+    public PostWithBoardAndUserSpecifications(GeneralSpecParams generalParams)
         : base(
             x =>
-                (string.IsNullOrEmpty(postParams.Search) || x.Text.ToLower().Contains(postParams.Search))
-                && (string.IsNullOrEmpty(postParams.UserId)|| x.Board == postParams.BoardId)
-                && (string.IsNullOrEmpty(postParams.UserId) || x.Author == postParams.UserId)
+                (string.IsNullOrEmpty(generalParams.Search) || x.Text.ToLower().Contains(generalParams.Search))
+                && (string.IsNullOrEmpty(generalParams.UserId) || x.Board == generalParams.BoardId)
+                && (string.IsNullOrEmpty(generalParams.UserId) || x.Author == generalParams.UserId)
         )
     {
         AddInclude(x => x.Board);
         AddInclude(x => x.Author);
         AddOrderBy(x => x.CreatedAt);
-        ApplyPaging(postParams.PageSize * (postParams.PageIndex - 1), postParams.PageSize);
+        ApplyPaging(generalParams.PageSize * (generalParams.PageIndex - 1), generalParams.PageSize);
     }
 
     public PostWithBoardAndUserSpecifications(string id)

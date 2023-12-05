@@ -1,28 +1,21 @@
-using API;
 using API.Extensions;
 using API.Helpers;
 using API.Middleware;
+using Core.Entities;
 using Infrastructure.Data;
-using Infrastructure.Identity;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder
-    .Services
-    .AddDbContext<ForumContext>(opt =>
-    {
-        opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    });
-builder
-    .Services
-    .AddDbContext<AppIdentityDbContext>(opt =>
-    {
-        opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    });
+builder.Services.AddScoped(provider =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var databaseName = builder.Configuration["Mongo:DB"];
+    return new ForumContext(connectionString, databaseName);
+});
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
 builder.Services.AddServiceCollection();
@@ -65,14 +58,6 @@ using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<ForumContext>();
 var logger = services.GetRequiredService<ILogger<Program>>();
-try
-{
-    await context.Database.MigrateAsync();
-}
-catch (Exception e)
-{
-    logger.LogError(e, "Error during migration");
-    throw;
-}
+
 
 app.Run();

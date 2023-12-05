@@ -1,4 +1,5 @@
 using Core.Entities;
+using Utilities.Helpers;
 
 namespace Core.Interfaces;
 
@@ -8,7 +9,7 @@ public interface IBoardService
 
     public Task<Board> AddMembersToBoard(string userId, string boardId);
     
-    public Task GetBoards(string searchString);
+    public Task<Pagination<Board>>  GetBoards(string searchString);
 
     public Task GetBoardPosts(string id);
 

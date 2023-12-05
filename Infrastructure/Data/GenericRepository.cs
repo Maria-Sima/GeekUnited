@@ -1,44 +1,48 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace Infrastructure.Data;
 
 public class GenericRepository<T> : IGenericRepository<T>
     where T : BaseEntity
 {
-    private readonly ForumContext _context;
+    private readonly IMongoCollection<T> _collection;
 
-    public GenericRepository(ForumContext context)
+    public GenericRepository(ForumContext context, string collectionName)
     {
-        _context = context;
+        _collection = context.GetCollection<T>(collectionName);
     }
 
-    public async Task<T> GetByIdAsync(int id)
+    public async Task<T> GetByIdAsync(string id)
     {
-        return await _context.Set<T>().FindAsync(id);
+        var filter = Builders<T>.Filter.Eq("_id", id);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
     public async Task<IReadOnlyList<T>> ListAllAsync()
     {
-        return await _context.Set<T>().ToListAsync();
+        return await _collection.Find(_ => true).ToListAsync();
     }
 
     public void Add(T entity)
     {
-        _context.Set<T>().Add(entity);
+        _collection.InsertOne(entity);
     }
 
     public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
     {
-        return await ApplySpecification(spec).FirstOrDefaultAsync();
+        var result = await ApplySpecification(spec).FirstOrDefaultAsync();
+        return result;
     }
 
     public async Task<int> CountAsync(ISpecification<T> spec)
     {
-        return await ApplySpecification(spec).CountAsync();
+        var res = await ApplySpecification(spec).CountAsync();
+        return (int)res;
     }
+
 
     public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
     {
@@ -47,22 +51,25 @@ public class GenericRepository<T> : IGenericRepository<T>
 
     public void Update(T entity)
     {
-        _context.Set<T>().Attach(entity);
-        _context.Entry(entity).State = EntityState.Modified;
+        var filter = Builders<T>.Filter.Eq("_id", entity.Id);
+        _collection.ReplaceOne(filter, entity);
     }
 
-    public void Delete(T entity)
+    public void Delete(string id)
     {
-        _context.Set<T>().Remove(entity);
+        var filter = Builders<T>.Filter.Eq("_id", id);
+        _collection.DeleteOne(filter);
     }
 
-    public void SaveChangesAsync()
-    {
-        _context.SaveChangesAsync();
-    }
 
-    private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+    private IFindFluent<T, T> ApplySpecification(ISpecification<T> spec)
     {
-        return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
+        var builder = Builders<T>.Filter;
+        var filter = builder.Empty; // Default filter
+
+        if (spec.Criteria != null)
+            filter = builder.And(spec.Criteria);
+
+        return _collection.Find(filter);
     }
 }

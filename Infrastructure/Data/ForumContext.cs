@@ -1,9 +1,8 @@
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 namespace Infrastructure.Data;
 
-public class ForumContext : DbContext
+public class ForumContext
 {
     private readonly IMongoDatabase _database;
 

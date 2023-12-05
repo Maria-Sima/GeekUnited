@@ -1,5 +1,7 @@
 using Core.Entities;
 using Core.Interfaces;
+using Core.Specifications;
+using Utilities.Helpers;
 
 namespace Infrastructure.Services;
 
@@ -79,9 +81,23 @@ public class BoardService : IBoardService
         }
     }
 
-    public Task GetBoards(string searchString)
+    public async Task<Pagination<Board>> GetBoards(GeneralSpecParams specParams)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var spec = new BoardWithMembersSpecification(specParams);
+            var countSpec = new BoardWithFiltersForCountSpecification();
+            int totalBoards = await _boardRepo.CountAsync(countSpec);
+            IReadOnlyList<Board> boards = await _boardRepo.ListAsync(spec);
+
+            return new Pagination<Board>(specParams.PageIndex, specParams.PageSize, totalBoards, boards);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+  
     }
 
     public Task GetBoardPosts(string id)
@@ -89,9 +105,21 @@ public class BoardService : IBoardService
         throw new NotImplementedException();
     }
 
-    public Task<Board> GetBoardDetails(string boardId)
+    public async Task<Board> GetBoardDetails(string boardId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var boardDetails = await _boardRepo.GetEntityWithSpec(
+                new BoardWithMembersSpecification(boardId)
+            );
+
+            return boardDetails;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task RemoveUsersFromBoard(string boardId, string userId)
@@ -107,7 +135,7 @@ public class BoardService : IBoardService
                 throw new Exception("Board not found");
 
             board.Members.Remove(userId);
-          await  _userService.RemoveBoardFromUser(boardId, userId);
+            await _userService.RemoveBoardFromUser(boardId, userId);
         }
         catch (Exception e)
         {
@@ -116,9 +144,9 @@ public class BoardService : IBoardService
         }
     }
 
-    public Task DeleteBoard(string boardId)
+    public async Task DeleteBoard(string boardId)
     {
-        throw new NotImplementedException();
+         _boardRepo.Delete(boardId);
     }
 
     public Task UpdateBoardInfo(string boardId, string name, string username, string image)

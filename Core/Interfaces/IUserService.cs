@@ -14,9 +14,8 @@ public interface IUserService
     public Task<UserDto> Register(RegisterDto registerDto);
     public Task<bool> CheckEmailExistsAsync(string email);
     public Task<UserDto> GetCurrentUser(ClaimsPrincipal claimsPrincipal);
-    public Task<PostDto> AddPost(PostRequestDto postForm);
     public Task<CommentDto> AddComment(CommentRequestDto comm);
-    public Task SubscribeToBoard(string userId, string boardId);
+
     public Task AddBoardToMember(string userId, string boardId);
     public Task AddBoardCreatedByUser(string boardCreatedByUserId, AppUser user);
 

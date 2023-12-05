@@ -13,6 +13,5 @@ public interface IGenericRepository<T>
     Task<int> CountAsync(ISpecification<T> spec);
     Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
     void Update(T entity);
-    void Delete(T entity);
-    void SaveChangesAsync();
+    void Delete(string id);
 }

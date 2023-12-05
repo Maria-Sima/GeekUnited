@@ -37,7 +37,7 @@ public class UserService : IUserService
     {
         throw new NotImplementedException();
     }
-    
+
 
     public async Task<UserDto> Register(RegisterDto registerDto)
     {
@@ -45,8 +45,7 @@ public class UserService : IUserService
         {
             Name = registerDto.DisplayName,
             UserName = registerDto.DisplayName,
-            Email = registerDto.Email,
-            Password = registerDto.Password
+            Email = registerDto.Email
         };
         Console.WriteLine("!!" + user);
         await _userManager.CreateAsync(user, registerDto.Password);
@@ -76,32 +75,8 @@ public class UserService : IUserService
         return await _userManager.FindByEmailAsync(email) != null;
     }
 
-    public async Task<PostDto> AddPost(PostRequestDto postForm)
-    {
-        var user = await _userManager.FindByIdAsync(postForm.UserId);
-        if (user == null)
-            throw new Exception("User not found");
-
-        var board = await _boardService.GetBoardById(postForm.BoardId);
-        if (board == null)
-            throw new Exception("Board not found");
-
-        var post = await _postService.AddPost(postForm, user, board);
-
-        await _boardService.AddPostToBoard(post, board);
-
-        user.Posts.Add((string)post);
-        await _userManager.UpdateAsync(user);
-
-        return _mapper.Map<Post, PostDto>(post);
-    }
 
     public Task<CommentDto> AddComment(CommentRequestDto comm)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SubscribeToBoard(string userId, string boardId)
     {
         throw new NotImplementedException();
     }
@@ -144,18 +119,13 @@ public class UserService : IUserService
         await _userManager.UpdateAsync(user);
     }
 
-    public async Task<UserDto> Login(LoginDto loginDto)
+    public async Task<AppUser> Login(LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
         if (user == null)
             throw new Exception("Invalid email");
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-        return new UserDto
-        {
-            Email = user.Email,
-            Token = _tokenService.CreateToken(user),
-            DisplayName = user.UserName
-        };
+        return user;
     }
 }
