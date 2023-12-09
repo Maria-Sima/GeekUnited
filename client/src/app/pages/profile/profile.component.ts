@@ -14,9 +14,8 @@ export class ProfileComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    // Add your actual services here
   ) {
-    this.profileTabs = profileTabs; // Update to your actual tabs data
+    this.profileTabs = profileTabs;
   }
 
   async ngOnInit() {

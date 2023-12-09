@@ -21,9 +21,9 @@ export class CommentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.threadId = 'yourThreadId'; // Replace with the actual thread ID
-    this.currentUserImg = 'yourCurrentUserImg'; // Replace with the actual user image URL
-    this.currentUserId = 'yourCurrentUserId'; // Replace with the actual user ID
+    this.threadId = 'yourThreadId'; // Replace with the actual post ID
+    this.currentUserImg = 'yourCurrentUserImg'; // Replace with the actual user.ts image URL
+    this.currentUserId = 'yourCurrentUserId'; // Replace with the actual user.ts ID
 
     this.commentForm = this.fb.group({
       thread: ['', Validators.required],
@@ -36,7 +36,7 @@ export class CommentComponent implements OnInit {
 
       // Call your addCommentToThread function here
       // Adjust the method based on your comment service method and addCommentToThread function
-      // Example: this.commentService.addCommentToThread(this.threadId, values.thread, this.currentUserId, '/');
+      // Example: this.commentService.addCommentToThread(this.threadId, values.post, this.currentUserId, '/');
 
       this.commentForm.reset();
     }

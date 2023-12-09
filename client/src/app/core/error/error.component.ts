@@ -1,48 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment.prod";
+import { Component, OnInit } from '@angular/core';
+import { ErrorService } from './error.service';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-error',
   templateUrl: './error.component.html',
-  styleUrls: ['./error.component.scss']
+  styleUrls: ['./error.component.scss'],
 })
 export class ErrorComponent implements OnInit {
+  showErrors = false;
 
-  baseUrl = environment.apiUrl;
-  validationErrors: any;
+  errors$: Observable<string[]>;
 
-  constructor(private http: HttpClient) {
+  constructor(public errorService: ErrorService) {
+    console.log('Created error component');
   }
 
   ngOnInit() {
+    this.errors$ = this.errorService.errors$.pipe(tap(() => (this.showErrors = true)));
   }
 
-  get404Error() {
-    this.http.get(this.baseUrl + 'products/42').subscribe({
-      next:(response)=>console.log(response),
-      error:(e)=>console.log(e)
-    });
-  }
-
-  get500Error() {
-    this.http.get(this.baseUrl + 'buggy/servererror').subscribe({
-      next:(response)=>console.log(response),
-      error:(e)=>console.log(e)
-    });
-  }
-
-  get400Error() {
-    this.http.get(this.baseUrl + 'buggy/badrequest').subscribe({
-      next:(response)=>console.log(response),
-      error:(e)=>console.log(e)
-    });
-  }
-
-  get400ValidationError() {
-    this.http.get(this.baseUrl + 'products/fortytwo').subscribe({
-      next:(response)=>console.log(response),
-      error:(e)=>console.log(e)
-    });
+  onClose() {
+    this.showErrors = false;
   }
 }

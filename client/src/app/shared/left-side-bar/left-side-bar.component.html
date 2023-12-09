@@ -1,0 +1,20 @@
+<section class="custom-scrollbar leftsidebar">
+  <div class="flex w-full flex-1 flex-col gap-6 px-6">
+    <a *ngFor="let link of sidebarLinks"
+       [class.leftsidebar_link]="isActive(link.route)"
+       [routerLink]="link.route"
+    >
+      <img [alt]="link.label" [src]="link.imgURL" height="24" width="24"/>
+      <p class="text-light-1 max-lg:hidden">{{ link.label }}</p>
+    </a>
+  </div>
+
+  <div class="mt-10 px-6">
+    <div *ngIf="authService.isAuthenticated()">
+      <div (click)="signOut()" class="flex cursor-pointer gap-4 p-4">
+        <img alt="logout" height="24" src="/src/assets/logout.svg" width="24"/>
+        <p class="text-light-2 max-lg:hidden">Logout</p>
+      </div>
+    </div>
+  </div>
+</section>

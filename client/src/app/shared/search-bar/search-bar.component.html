@@ -1,0 +1,10 @@
+<div class="searchbar">
+  <img alt="search" class="object-contain" height="24" src="/src/assets/search-gray.svg"
+       width="24"/>
+  <input
+    [(ngModel)]="search"
+    class="no-focus searchbar_input"
+    id="text"
+    placeholder="{{ routeType !== '/search' ? 'Search boards' : 'Search creators' }}"
+  />
+</div>

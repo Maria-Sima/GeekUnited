@@ -1,75 +1,87 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
-using MongoDB.Driver;
+using Google.Cloud.Firestore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
 public class GenericRepository<T> : IGenericRepository<T>
     where T : BaseEntity
 {
-    private readonly IMongoCollection<T> _collection;
+    private readonly FirestoreDb _firestoreDb;
 
-    public GenericRepository(ForumContext context, string collectionName)
+    public GenericRepository(FirestoreDb firestoreDb)
     {
-        _collection = context.GetCollection<T>(collectionName);
+        _firestoreDb = firestoreDb ?? throw new ArgumentNullException(nameof(firestoreDb));
     }
 
     public async Task<T> GetByIdAsync(string id)
     {
-        var filter = Builders<T>.Filter.Eq("_id", id);
-        return await _collection.Find(filter).FirstOrDefaultAsync();
+        var documentSnapshot = await _firestoreDb
+            .Collection(typeof(T).Name)
+            .Document(id)
+            .GetSnapshotAsync();
+
+        // Map Firestore document to your entity
+        return documentSnapshot.ConvertTo<T>();
     }
 
     public async Task<IReadOnlyList<T>> ListAllAsync()
     {
-        return await _collection.Find(_ => true).ToListAsync();
+        var query = await _firestoreDb
+            .Collection(typeof(T).Name)
+            .GetSnapshotAsync();
+
+        // Map Firestore documents to your entities
+        return query.Documents.Select(doc => doc.ConvertTo<T>()).ToList();
     }
 
-    public void Add(T entity)
+    public async void Add(T entity)
     {
-        _collection.InsertOne(entity);
+        var collectionReference = _firestoreDb.Collection(typeof(T).Name);
+        await collectionReference.AddAsync(entity);
     }
 
     public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
     {
-        var result = await ApplySpecification(spec).FirstOrDefaultAsync();
-        return result;
+        var result = await ApplySpecification(spec);
+        return await result.FirstOrDefaultAsync();
     }
 
     public async Task<int> CountAsync(ISpecification<T> spec)
     {
-        var res = await ApplySpecification(spec).CountAsync();
-        return (int)res;
+        var snapshot = await ApplySpecification(spec);
+        return snapshot.Count();
     }
-
 
     public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
     {
-        return await ApplySpecification(spec).ToListAsync();
+        var snapshot = await ApplySpecification(spec);
+        return await snapshot.ToListAsync();
     }
 
-    public void Update(T entity)
+    public async Task UpdateAsync(T entity)
     {
-        var filter = Builders<T>.Filter.Eq("_id", entity.Id);
-        _collection.ReplaceOne(filter, entity);
+        var documentReference = _firestoreDb.Collection(typeof(T).Name).Document(entity.Id);
+        await documentReference.SetAsync(entity, SetOptions.MergeAll);
     }
 
-    public void Delete(string id)
+    public async Task DeleteAsync(string id)
     {
-        var filter = Builders<T>.Filter.Eq("_id", id);
-        _collection.DeleteOne(filter);
+        var documentReference = _firestoreDb.Collection(typeof(T).Name).Document(id);
+        await documentReference.DeleteAsync();
     }
 
-
-    private IFindFluent<T, T> ApplySpecification(ISpecification<T> spec)
+    public async Task<T> GetByIdAsync(int id)
     {
-        var builder = Builders<T>.Filter;
-        var filter = builder.Empty; // Default filter
+        return await GetByIdAsync(id.ToString());
+    }
 
-        if (spec.Criteria != null)
-            filter = builder.And(spec.Criteria);
-
-        return _collection.Find(filter);
+    private async Task<IQueryable<T>> ApplySpecification(ISpecification<T> spec)
+    {
+        var query = _firestoreDb.Collection(typeof(T).Name);
+        var data = await query.GetSnapshotAsync();
+        return SpecificationEvaluator<T>.GetQuery(data.Documents.Select(doc => doc.ConvertTo<T>()).AsQueryable(), spec);
     }
 }

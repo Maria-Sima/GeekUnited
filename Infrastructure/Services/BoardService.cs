@@ -45,7 +45,7 @@ public class BoardService : IBoardService
             };
 
             _boardRepo.Add(newBoard);
-            await _userService.AddBoardCreatedByUser(id, user);
+            await _userService.AddBoardToMember(createdById, id);
 
             return newBoard;
         }
@@ -69,8 +69,11 @@ public class BoardService : IBoardService
                 throw new Exception("User not found");
 
             if (board.Members.Contains(user.Id))
-                throw new Exception("User is already a member of this boar");
+                throw new Exception("User is already a member of this board");
+
             board.Members.Add(user.Id);
+
+            await _boardRepo.UpdateAsync(board);
 
             return board;
         }
@@ -87,8 +90,8 @@ public class BoardService : IBoardService
         {
             var spec = new BoardWithMembersSpecification(specParams);
             var countSpec = new BoardWithFiltersForCountSpecification();
-            int totalBoards = await _boardRepo.CountAsync(countSpec);
-            IReadOnlyList<Board> boards = await _boardRepo.ListAsync(spec);
+            var totalBoards = await _boardRepo.CountAsync(countSpec);
+            var boards = await _boardRepo.ListAsync(spec);
 
             return new Pagination<Board>(specParams.PageIndex, specParams.PageSize, totalBoards, boards);
         }
@@ -97,22 +100,31 @@ public class BoardService : IBoardService
             Console.WriteLine(e);
             throw;
         }
-  
     }
 
-    public Task GetBoardPosts(string id)
+    public async Task<Board> GetBoardById(string boardId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _boardRepo.GetByIdAsync(boardId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task GetBoardPosts(string id)
+    {
+        // Implement the logic for fetching board posts
     }
 
     public async Task<Board> GetBoardDetails(string boardId)
     {
         try
         {
-            var boardDetails = await _boardRepo.GetEntityWithSpec(
-                new BoardWithMembersSpecification(boardId)
-            );
-
+            var boardDetails = await _boardRepo.GetByIdAsync(boardId);
             return boardDetails;
         }
         catch (Exception e)
@@ -128,6 +140,7 @@ public class BoardService : IBoardService
         {
             var user = await _userService.GetUserById(userId);
             var board = await _boardRepo.GetByIdAsync(boardId);
+
             if (user == null)
                 throw new Exception("User not found");
 
@@ -135,6 +148,9 @@ public class BoardService : IBoardService
                 throw new Exception("Board not found");
 
             board.Members.Remove(userId);
+
+            await _boardRepo.UpdateAsync(board); // UpdateAsync the board to reflect the removed member
+
             await _userService.RemoveBoardFromUser(boardId, userId);
         }
         catch (Exception e)
@@ -146,11 +162,37 @@ public class BoardService : IBoardService
 
     public async Task DeleteBoard(string boardId)
     {
-         _boardRepo.Delete(boardId);
+        var board = await _boardRepo.GetByIdAsync(boardId);
+        if (board == null)
+            throw new Exception("Board not found");
+        await _boardRepo.DeleteAsync(boardId);
     }
 
-    public Task UpdateBoardInfo(string boardId, string name, string username, string image)
+    public void AddPostToBoard(Board board, string postId)
     {
-        throw new NotImplementedException();
+        board.Posts.Add(postId);
+        _boardRepo.UpdateAsync(board);
+    }
+
+    public async Task UpdateBoardInfo(string boardId, string name, string username, string image)
+    {
+        try
+        {
+            var board = await _boardRepo.GetByIdAsync(boardId);
+
+            if (board == null)
+                throw new Exception("Board not found");
+
+            board.BoardName = name;
+            board.Username = username;
+            board.Image = image;
+
+            await _boardRepo.UpdateAsync(board);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

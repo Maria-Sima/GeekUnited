@@ -9,9 +9,8 @@ namespace Infrastructure.Services;
 
 public class UserService : IUserService
 {
-    private readonly IBoardService _boardService;
     private readonly IMapper _mapper;
-    private readonly IPostService _postService;
+   
     private readonly SignInManager<AppUser> _signInManager;
     private readonly ITokenService _tokenService;
     private readonly UserManager<AppUser> _userManager;
@@ -20,14 +19,14 @@ public class UserService : IUserService
         UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
         ITokenService tokenService,
-        IPostService postService,
-        IBoardService boardService,
+  
+
         IMapper mapper
     )
     {
         _tokenService = tokenService;
-        _postService = postService;
-        _boardService = boardService;
+
+   
         _mapper = mapper;
         _signInManager = signInManager;
         _userManager = userManager;
@@ -81,6 +80,22 @@ public class UserService : IUserService
         throw new NotImplementedException();
     }
 
+    public async void AddPostToUser(string userId, string postId)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new Exception("User not found");
+            user.Posts.Add(postId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
 
     public async Task AddBoardToMember(string userId, string boardId)
     {
@@ -106,11 +121,6 @@ public class UserService : IUserService
         throw new NotImplementedException();
     }
 
-    public async Task AddBoardCreatedByUser(string boardCreatedByUserId, AppUser user)
-    {
-        user.Boards.Add(boardCreatedByUserId);
-        await _userManager.UpdateAsync(user);
-    }
 
     public async Task RemoveBoardFromUser(string boardId, string userId)
     {

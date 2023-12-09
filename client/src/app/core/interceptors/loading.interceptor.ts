@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {finalize, Observable} from "rxjs";
-import {BusyService} from "../services/busy.service";
+import { Injectable } from '@angular/core';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { finalize, Observable } from 'rxjs';
+import { BusyService } from '../loading/loading.service';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
@@ -21,7 +21,7 @@ export class LoadingInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       finalize(() => {
         this.busyService.idle();
-      })
+      }),
     );
   }
 }

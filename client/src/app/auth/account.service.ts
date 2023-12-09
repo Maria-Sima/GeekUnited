@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { UserResponse } from '../core/models/UserResponse';
+import { UserResponse } from '../core/models/userResponse';
 import { environment } from '../../environments/environment.prod';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -12,13 +12,25 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AccountService {
   baseUrl = environment.apiUrl;
+  isLoggedIn$: Observable<boolean>;
+  isLoggedOut$: Observable<boolean>;
   private currentUserSource = new ReplaySubject<UserResponse | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) {}
+  ) {
+    this.isLoggedIn$ = this.currentUser$.pipe(map((user) => !!user));
+
+    this.isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
+
+    const user = localStorage.getItem('AUTH_DATA');
+
+    if (user) {
+      this.currentUserSource.next(JSON.parse(user));
+    }
+  }
 
   loadCurrentUser(token: string): Observable<UserResponse | null> {
     if (token === null) {

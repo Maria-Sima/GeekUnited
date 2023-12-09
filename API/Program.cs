@@ -1,21 +1,20 @@
 using API.Extensions;
 using API.Helpers;
 using API.Middleware;
-using Core.Entities;
-using Infrastructure.Data;
-using MongoDB.Identity;
+using Google.Cloud.Firestore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped(provider =>
+builder.Services.AddSingleton(provider =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    var databaseName = builder.Configuration["Mongo:DB"];
-    return new ForumContext(connectionString, databaseName);
+    var credentialsPath = "/Config/geeku-9c9ad-firebase-adminsdk-oypsv-b1b49e9aeb.json";
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialsPath);
+    return FirestoreDb.Create(builder.Configuration["Firebase:ProjectId"]);
 });
+
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
 builder.Services.AddServiceCollection();
@@ -56,7 +55,6 @@ app.UseEndpoints(endpoints =>
 });
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
-var context = services.GetRequiredService<ForumContext>();
 var logger = services.GetRequiredService<ILogger<Program>>();
 
 

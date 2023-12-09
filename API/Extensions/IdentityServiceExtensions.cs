@@ -1,9 +1,6 @@
 using System.Text;
-using API.Config;
-using AspNetCore.Identity.MongoDbCore.Models;
 using Core.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Extensions;
@@ -35,13 +32,13 @@ public static class IdentityServiceExtensions
 
     private static void ConfigureIdentityStores(IServiceCollection services, IConfiguration config)
     {
-        var mongoDbSettings = config.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
-        services
-            .AddIdentity<AppUser, MongoIdentityRole>()
-            .AddMongoDbStores<AppUser, MongoIdentityRole, Guid>(
-                mongoDbSettings.ConnectionString,
-                mongoDbSettings.Name
-            ).AddSignInManager<SignInManager<AppUser>>();
+        // var mongoDbSettings = config.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
+        // services
+        //     .AddIdentity<AppUser, MongoIdentityRole>()
+        //     .AddMongoDbStores<AppUser, MongoIdentityRole, Guid>(
+        //         mongoDbSettings.ConnectionString,
+        //         mongoDbSettings.Name
+        //     ).AddSignInManager<SignInManager<AppUser>>();
     }
 
     private static void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration config)

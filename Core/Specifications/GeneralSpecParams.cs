@@ -5,7 +5,7 @@ public class GeneralSpecParams
     private const int MaxPageSize = 50;
 
     private int _pageSize = 6;
-    private string _search;
+    private string? _search;
 
     public int PageIndex { get; set; } = 1;
 
@@ -19,9 +19,9 @@ public class GeneralSpecParams
 
     public string? PostId { get; set; }
 
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
-    public string Sort { get; set; }
+    public string? Sort { get; set; }
 
     public string Search
     {

@@ -15,9 +15,9 @@ public interface IUserService
     public Task<bool> CheckEmailExistsAsync(string email);
     public Task<UserDto> GetCurrentUser(ClaimsPrincipal claimsPrincipal);
     public Task<CommentDto> AddComment(CommentRequestDto comm);
-
+    public void AddPostToUser(string userId, string postId);
     public Task AddBoardToMember(string userId, string boardId);
-    public Task AddBoardCreatedByUser(string boardCreatedByUserId, AppUser user);
+
 
     public Task RemoveBoardFromUser(string boardId, string userId);
 }

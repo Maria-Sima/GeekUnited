@@ -1,10 +1,10 @@
-import {Component, Input} from '@angular/core';
-import {Router} from "@angular/router";
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-user-card',
+  selector: 'app-user.ts-card',
   templateUrl: './user-card.component.html',
-  styleUrls: ['./user-card.component.scss']
+  styleUrls: ['./user-card.component.scss'],
 })
 export class UserCardComponent {
   @Input() id: string = '';
@@ -19,7 +19,7 @@ export class UserCardComponent {
 
   navigateToProfile(): void {
     if (this.isCommunity) {
-      this.router.navigate(['/communities', this.id]);
+      this.router.navigate(['/boards', this.id]);
     } else {
       this.router.navigate(['/profile', this.id]);
     }

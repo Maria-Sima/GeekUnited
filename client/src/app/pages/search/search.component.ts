@@ -23,22 +23,22 @@ export class SearchComponent implements OnInit {
   }
 
   async initData() {
-    this.user = await currentUser();
-    if (!this.user) return;
-
-    this.userInfo = await fetchUser(this.user.id);
-    if (!this.userInfo?.onboarded) {
-      redirect('/onboarding');
-      return;
-    }
-
-    this.searchParams = this.route.snapshot.data.searchParams; // Adjust based on your routing configuration
-
-    this.result = await fetchUsers({
-      userId: this.user.id,
-      searchString: this.searchParams.q,
-      pageNumber: this.searchParams?.page ? +this.searchParams.page : 1,
-      pageSize: 25,
-    });
+    // this.user = await currentUser();
+    // if (!this.user) return;
+    //
+    // this.userInfo = await fetchUser(this.user.id);
+    // if (!this.userInfo?.onboarded) {
+    //   redirect('/onboarding');
+    //   return;
+    // }
+    //
+    // this.searchParams = this.route.snapshot.data.searchParams;
+    //
+    // this.result = await fetchUsers({
+    //   userId: this.user.id,
+    //   searchString: this.searchParams.q,
+    //   pageNumber: this.searchParams?.page ? +this.searchParams.page : 1,
+    //   pageSize: 25,
+    // });
   }
 }
