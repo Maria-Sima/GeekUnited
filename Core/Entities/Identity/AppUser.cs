@@ -1,15 +1,8 @@
-using AspNetCore.Identity.MongoDbCore.Models;
-using MongoDB.Bson.Serialization.Attributes;
-
 namespace Core.Entities;
 
-public class AppUser : MongoIdentityUser<Guid>
+public class AppUser : BaseEntity
 
 {
-    [BsonId]
-    [BsonElement("_id")]
-    public string Id { get; set; }
-
     public string Username { get; set; }
 
     public string? ProfilePhoto { get; set; }

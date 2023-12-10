@@ -8,9 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
         <PackageReference Include="AutoMapper" Version="12.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
+        <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
         <PackageReference Include="FireSharp" Version="2.0.4" />
         <PackageReference Include="Google.Cloud.Firestore" Version="3.5.0-beta01" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
@@ -19,7 +20,6 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 

@@ -1,6 +1,7 @@
 using API.Extensions;
 using API.Helpers;
 using API.Middleware;
+using FirebaseAdmin;
 using Google.Cloud.Firestore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,13 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton(provider =>
 {
     var credentialsPath = "/Config/geeku-9c9ad-firebase-adminsdk-oypsv-b1b49e9aeb.json";
     Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialsPath);
     return FirestoreDb.Create(builder.Configuration["Firebase:ProjectId"]);
 });
-
+builder.Services.AddSingleton(FirebaseApp.Create());
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
 builder.Services.AddServiceCollection();

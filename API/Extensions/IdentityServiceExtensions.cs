@@ -1,5 +1,6 @@
-using System.Text;
 using Core.Entities;
+using Firebase.Auth;
+using Firebase.Auth.Providers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -32,13 +33,17 @@ public static class IdentityServiceExtensions
 
     private static void ConfigureIdentityStores(IServiceCollection services, IConfiguration config)
     {
-        // var mongoDbSettings = config.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
-        // services
-        //     .AddIdentity<AppUser, MongoIdentityRole>()
-        //     .AddMongoDbStores<AppUser, MongoIdentityRole, Guid>(
-        //         mongoDbSettings.ConnectionString,
-        //         mongoDbSettings.Name
-        //     ).AddSignInManager<SignInManager<AppUser>>();
+        var firebaseProjectName = "<FIREBASE_PROJECT_NAME>";
+        services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig
+        {
+            ApiKey = "<API_KEY>",
+            AuthDomain = $"{firebaseProjectName}.firebaseapp.com",
+            Providers = new FirebaseAuthProvider[]
+            {
+                new EmailProvider(),
+                new GoogleProvider()
+            }
+        }));
     }
 
     private static void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration config)
@@ -47,13 +52,14 @@ public static class IdentityServiceExtensions
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
+                options.Authority = "https://securetoken.google.com/my-firebase-project";
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"])),
-                    ValidIssuer = config["Token:Issuer"],
                     ValidateIssuer = true,
-                    ValidateAudience = false
+                    ValidIssuer = "https://securetoken.google.com/my-firebase-project",
+                    ValidateAudience = true,
+                    ValidAudience = "my-firebase-project",
+                    ValidateLifetime = true
                 };
             });
     }
