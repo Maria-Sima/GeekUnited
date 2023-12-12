@@ -21,47 +21,34 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
+    public AppUser CreateUser(NewUserRequest userRequest)
+    {
+        try
+        {
+            AppUser newUser = new AppUser
+            {
+                Name = userRequest.Name,
+                Bio = userRequest.Bio,
+                Username = userRequest.Username,
+                ProfilePhoto = userRequest.ProfilePhoto
+            };
+             _userRepo.Add(newUser);
+             return newUser;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
+    }
     public Task<List<Post>> GetActivity(string userId)
     {
         throw new NotImplementedException();
     }
 
 
-    // public async Task<UserDto> Register(RegisterDto registerDto)
-    // {
-    //     var user = new AppUser
-    //     {
-    //         Name = registerDto.DisplayName,
-    //          = registerDto.DisplayName,
-    //         Email = registerDto.Email
-    //     };
-    //     Console.WriteLine("!!" + user);
-    //     await _userRepo.CreateAsync(user, registerDto.Password);
-    //
-    //     return new UserDto
-    //     {
-    //         DisplayName = user.UserName,
-    //         Token = _tokenService.CreateToken(user),
-    //         Email = user.Email
-    //     };
-    // }
 
-    // public async Task<UserDto> GetCurrentUser(ClaimsPrincipal claimsPrincipal)
-    // {
-    //     var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-    //     var user = await _userRepo.FindByIdAsync(userId);
-    //     return new UserDto
-    //     {
-    //         Email = user.Email,
-    //         Token = _tokenService.CreateToken(user),
-    //         DisplayName = user.UserName
-    //     };
-    // }
-
-    // public async Task<bool> CheckEmailExistsAsync(string email)
-    // {
-    //     return await _userRepo.FindByEmailAsync(email) != null;
-    // }
 
 
     public Task<CommentDto> AddComment(CommentRequestDto comm)
@@ -118,13 +105,5 @@ public class UserService : IUserService
         await _userRepo.UpdateAsync(user);
     }
 
-    // public async Task<AppUser> Login(LoginDto loginDto)
-    // {
-    //     var user = await _userRepo.FindByEmailAsync(loginDto.Email);
-    //     if (user == null)
-    //         throw new Exception("Invalid email");
-    //     var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-    //
-    //     return user;
-    // }
+
 }

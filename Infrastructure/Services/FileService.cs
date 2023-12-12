@@ -1,28 +1,31 @@
 using API.Dtos;
 using Core.Interfaces;
+using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services;
 
-public class FileService : IFileService
+public class FileService :IFileService
 {
-    public Task<BlobDto> DownloadAsync(string blobFileName)
+    private readonly StorageClient _storageClient;
+    public FileService(StorageClient storageClient)
     {
-        throw new NotImplementedException();
+        _storageClient = storageClient;
     }
 
-    public Task<List<BlobDto>> ListAsync()
+
+
+
+    public async Task<Uri> UploadFile(string name, IFormFile file,string bucketName)
     {
-        throw new NotImplementedException();
+        var randomGuid = Guid.NewGuid();
+        using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+        var blob = await _storageClient.UploadObjectAsync(bucketName, 
+            $"{name}-{randomGuid}", file.ContentType, stream);
+        var photoUri = new Uri(blob.MediaLink);
+        return photoUri;
     }
 
-    public Task<BlobResponseDto> UploadAsync(IFormFile blob)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<BlobResponseDto> DeleteAsync(string blobFileName)
-    {
-        throw new NotImplementedException();
-    }
+  
 }

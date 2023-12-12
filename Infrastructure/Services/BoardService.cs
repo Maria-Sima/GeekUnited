@@ -149,7 +149,7 @@ public class BoardService : IBoardService
 
             board.Members.Remove(userId);
 
-            await _boardRepo.UpdateAsync(board); // UpdateAsync the board to reflect the removed member
+            await _boardRepo.UpdateAsync(board); 
 
             await _userService.RemoveBoardFromUser(boardId, userId);
         }

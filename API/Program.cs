@@ -3,6 +3,7 @@ using API.Helpers;
 using API.Middleware;
 using FirebaseAdmin;
 using Google.Cloud.Firestore;
+using Google.Cloud.Storage.V1;
 
 var credentialsPath = Path.Combine(Directory.GetCurrentDirectory(), "Config", "firebaseConfig.json");
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialsPath);
@@ -17,6 +18,11 @@ builder.Services.AddSingleton(provider =>
     return FirestoreDb.Create(builder.Configuration["Firebase:ProjectId"]);
 });
 builder.Services.AddSingleton(FirebaseApp.Create());
+builder.Services.AddSingleton(provider =>
+{
+    return StorageClient.Create();
+});
+
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
 builder.Services.AddServiceCollection();
