@@ -8,6 +8,7 @@ public class AuthService : IAuthService
 {
     private readonly FirebaseAuthClient _firebaseAuth;
 
+
     public AuthService(FirebaseAuthClient firebaseAuth)
     {
         _firebaseAuth = firebaseAuth;
@@ -27,21 +28,31 @@ public class AuthService : IAuthService
 
     public void SignOut()
     {
-        _firebaseAuth.SignOut();
+        try
+        {
+            _firebaseAuth.SignOut();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
-    //TODO
-    // public Task GetCurrentUser()
-    // {
-    //     try{
-    //       
-    // }
-    //     catch (Exception e)
-    //     {
-    //         Console.WriteLine(e);
-    //         throw;
-    //     }
-    // }
+
+    public User GetCurrentUser()
+    {
+        try
+        {
+            return _firebaseAuth.User;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
 
     public async Task<bool> CheckIfEmailExists(string email)
     {
@@ -49,6 +60,19 @@ public class AuthService : IAuthService
         {
             var result = await _firebaseAuth.FetchSignInMethodsForEmailAsync(email);
             return result.UserExists;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task ResetPassword(string email)
+    {
+        try
+        {
+            await _firebaseAuth.ResetEmailPasswordAsync(email);
         }
         catch (Exception e)
         {

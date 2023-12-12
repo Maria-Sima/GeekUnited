@@ -4,6 +4,8 @@ using API.Middleware;
 using FirebaseAdmin;
 using Google.Cloud.Firestore;
 
+var credentialsPath = Path.Combine(Directory.GetCurrentDirectory(), "Config", "firebaseConfig.json");
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialsPath);
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -12,8 +14,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton(provider =>
 {
-    var credentialsPath = "/Config/geeku-9c9ad-firebase-adminsdk-oypsv-b1b49e9aeb.json";
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialsPath);
     return FirestoreDb.Create(builder.Configuration["Firebase:ProjectId"]);
 });
 builder.Services.AddSingleton(FirebaseApp.Create());

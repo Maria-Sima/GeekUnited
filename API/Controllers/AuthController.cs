@@ -1,53 +1,51 @@
 using API.Dtos;
 using API.Errors;
-using AutoMapper;
 using Core.Interfaces;
+using Firebase.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AccountController : BaseApiController
+public class AuthController : BaseApiController
 {
-    private readonly IMapper _mapper;
-    private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-    public AccountController(IUserService userService, IMapper mapper)
+    public AuthController(IAuthService authService)
     {
-        _userService = userService;
-        _mapper = mapper;
+        _authService = authService;
     }
 
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    public async Task<ActionResult<User>> GetCurrentUser()
     {
-        var user = await _userService.GetCurrentUser(HttpContext.User);
+        var user = _authService.GetCurrentUser();
         return Ok(user);
     }
 
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _userService.Login(loginDto);
-        if (user == null)
+        var auth = await _authService.Login(loginDto.Email, loginDto.Password);
+        if (auth == null)
             return Unauthorized(new ApiResponse(401));
 
-        return Ok(user);
+        return Ok(auth);
     }
 
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         Console.WriteLine("register vale" + registerDto);
-        if (_userService.CheckEmailExistsAsync(registerDto.Email).Result)
+        if (_authService.CheckIfEmailExists(registerDto.Email).Result)
             return new BadRequestObjectResult(
                 new ApiValidationErrorResponse { Errors = new[] { "Email address is in use" } }
             );
-        var user = await _userService.Register(registerDto);
-        if (user == null)
+        var auth = await _authService.SignUp(registerDto.Email, registerDto.Password);
+        if (auth == null)
             return BadRequest(new ApiResponse(400));
 
-        return Ok(user);
+        return Ok(auth);
     }
 }

@@ -12,7 +12,7 @@ public static class ApplicationServiceExtensions
     {
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IPostService, PostService>();
-        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBoardService, BoardService>();
         services.AddScoped<IFileService, FileService>();
