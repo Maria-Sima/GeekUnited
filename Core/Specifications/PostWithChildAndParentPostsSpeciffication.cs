@@ -1,8 +1,8 @@
-using Core.Entities;
+using Core.Documents;
 
 namespace Core.Specifications;
 
-public class PostWithChildAndParentPostsSpeciffication : BaseSpecification<Post>
+public class PostWithChildAndParentPostsSpeciffication : BaseSpecification<PostDocument>
 
 {
     public PostWithChildAndParentPostsSpeciffication() { }

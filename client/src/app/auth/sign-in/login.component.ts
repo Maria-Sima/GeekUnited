@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountService } from '../account.service';
+import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   returnUrl!: string;
 
   constructor(
-    private accountService: AccountService,
+    private accountService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {}

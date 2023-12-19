@@ -3,18 +3,20 @@ import { Injectable } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { UserResponse } from '../core/models/userResponse';
+
 import { environment } from '../../environments/environment.prod';
+
+import { IUser } from '../core/models/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AccountService {
+export class AuthService {
   baseUrl = environment.apiUrl;
   isLoggedIn$: Observable<boolean>;
   isLoggedOut$: Observable<boolean>;
-  private currentUserSource = new ReplaySubject<UserResponse | null>(1);
+  private currentUserSource = new ReplaySubject<IUser | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(
@@ -25,24 +27,21 @@ export class AccountService {
 
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
 
-    const user = localStorage.getItem('AUTH_DATA');
-
-    if (user) {
-      this.currentUserSource.next(JSON.parse(user));
-    }
+    const user = this.loadCurrentUser();
   }
 
-  loadCurrentUser(token: string): Observable<UserResponse | null> {
+  loadCurrentUser(): Observable<IUser | null> {
+    let token = localStorage.getItem('token');
     if (token === null) {
       this.currentUserSource.next(null);
-      return of<UserResponse | null>(null);
+      return of<IUser | null>(null);
     }
 
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<UserResponse>(this.baseUrl + 'account', { headers }).pipe(
-      map((user: UserResponse) => {
+    return this.http.get<IUser>(this.baseUrl + 'auth', { headers }).pipe(
+      map((user: IUser) => {
         localStorage.setItem('token', user.token);
         this.currentUserSource.next(user);
         return user;
@@ -51,8 +50,8 @@ export class AccountService {
   }
 
   login(values: any) {
-    return this.http.post<UserResponse>(this.baseUrl + 'account/login', values).pipe(
-      map((user: UserResponse) => {
+    return this.http.post<IUser>(this.baseUrl + 'account/login', values).pipe(
+      map((user: IUser) => {
         if (user) {
           localStorage.setItem('token', user.token);
           this.currentUserSource.next(user);
@@ -62,9 +61,8 @@ export class AccountService {
   }
 
   register(values: any) {
-    console.log(this.baseUrl + 'Account/sign-up');
-    return this.http.post<UserResponse>(this.baseUrl + 'Account/register', values).pipe(
-      map((user: UserResponse) => {
+    return this.http.post<IUser>(this.baseUrl + 'Account/register', values).pipe(
+      map((user: IUser) => {
         if (user) {
           localStorage.setItem('token', user.token);
           this.currentUserSource.next(user);

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map, of, switchMap, timer } from 'rxjs';
-import { AccountService } from '../account.service';
+import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private accountService: AccountService,
+    private accountService: AuthService,
     private router: Router,
   ) {}
 

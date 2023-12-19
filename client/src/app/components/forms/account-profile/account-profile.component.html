@@ -1,1 +1,37 @@
-<p>account-profile works!</p>
+<form (ngSubmit)="onSubmit()" [formGroup]="onboardForm">
+  <div class="flex flex-col justify-start gap-10">
+    <app-form-input [label]="'Name'" [type]="'email'" formControlName="name"></app-form-input>
+
+    <app-form-input [label]="'Name'" [type]="'email'" formControlName="name"></app-form-input>
+
+    <app-form-input [label]="'Bio'" [type]="'email'" formControlName="name"></app-form-input>
+
+    <div class="flex items-center gap-4">
+      <label class="account-form_image-label">
+        <img *ngIf="onboardForm.get('profile_photo')?.value; else defaultImage"
+             alt="profile_icon"
+             class="rounded-full object-contain"
+             height="96" ngSrc="onboardForm.get('profile_photo')?.value"
+             width="96"/>
+        <ng-template #defaultImage>
+          <img alt="profile_icon"
+               class="object-contain"
+               height="24" src="/assets/profile.svg"
+               width="24"/>
+        </ng-template>
+      </label>
+      <div class="flex-1 text-base-semibold text-gray-200">
+        <input (change)="handleImage($event)"
+               accept="image/*"
+               class="account-form_image-input"
+               placeholder="Add profile photo"
+               type="file"/>
+      </div>
+    </div>
+
+    <div>
+      <button class="bg-primary-500" type="submit">{{ btnTitle }}</button>
+    </div>
+  </div>
+</form>
+

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountService } from '../../../auth/account.service';
+import { AuthService } from '../../../auth/auth.service';
 import { UserResponse } from '../../../core/models/userResponse';
 
 @Component({
@@ -14,7 +14,7 @@ export class CreatePostComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private auth: AccountService,
+    private auth: AuthService,
   ) {}
 
   ngOnInit(): void {

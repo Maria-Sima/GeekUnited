@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class ErrorComponent implements OnInit {
   showErrors = false;
 
-  errors$: Observable<string[]>;
+  errors$!: Observable<string[]>;
 
   constructor(public errorService: ErrorService) {
     console.log('Created error component');

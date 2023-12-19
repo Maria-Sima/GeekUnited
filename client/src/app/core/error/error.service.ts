@@ -1,7 +1,9 @@
 import { BehaviorSubject, filter, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ErrorService {
   private subject = new BehaviorSubject<string[]>([]);
 

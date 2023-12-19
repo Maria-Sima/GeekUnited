@@ -1,4 +1,3 @@
-using API.Dtos;
 using API.Errors;
 using Core.Entities;
 using Core.Interfaces;
@@ -7,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class BoardController:BaseApiController
+public class BoardController : BaseApiController
 {
     private readonly IBoardService _boardService;
+
     public BoardController(IBoardService boardService)
     {
         _boardService = boardService;
     }
-    
+
     [HttpGet("all")]
     public async Task<ActionResult<IReadOnlyList<Board>>> GetBoards([FromQuery] GeneralSpecParams generalParams)
     {
@@ -38,19 +38,26 @@ public class BoardController:BaseApiController
     [HttpPost("add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Board>> AddBoard([FromBody]  string id, string name, string username, string image, string bio, string createdById)
+    public async Task<ActionResult<Board>> AddBoard(
+        [FromBody] string id,
+        string name,
+        string username,
+        IFormFile image,
+        string bio,
+        string createdById
+    )
     {
-        var board = await _boardService.CreateBoard(id,name,username,image,bio,createdById);
-    
+        var board = await _boardService.CreateBoard(id, name, username, image, bio, createdById);
+
         return Ok(board);
     }
 
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status410Gone)]
-    public async  Task<ActionResult> DeleteBoard(string boardId)
+    public async Task<ActionResult> DeleteBoard(string boardId)
     {
-       await _boardService.DeleteBoard(boardId);
+        await _boardService.DeleteBoard(boardId);
 
         return Ok();
     }

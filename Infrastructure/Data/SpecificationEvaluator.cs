@@ -1,11 +1,11 @@
-using Core.Entities;
+using Core.Documents;
 using Core.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
 public class SpecificationEvaluator<TEntity>
-    where TEntity : BaseEntity
+    where TEntity : BaseDocument
 {
     public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
     {

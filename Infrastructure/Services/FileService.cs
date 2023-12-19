@@ -18,12 +18,12 @@ public class FileService :IFileService
 
     public async Task<Uri> UploadFile(string name, IFormFile file,string bucketName)
     {
-        var randomGuid = Guid.NewGuid();
+        Guid randomGuid = Guid.NewGuid();
         using var stream = new MemoryStream();
         await file.CopyToAsync(stream);
         var blob = await _storageClient.UploadObjectAsync(bucketName, 
             $"{name}-{randomGuid}", file.ContentType, stream);
-        var photoUri = new Uri(blob.MediaLink);
+        Uri photoUri = new Uri(blob.MediaLink);
         return photoUri;
     }
 

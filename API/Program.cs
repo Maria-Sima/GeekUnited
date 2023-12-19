@@ -13,20 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton(provider =>
-{
-    return FirestoreDb.Create(builder.Configuration["Firebase:ProjectId"]);
-});
+builder.Services.AddSingleton(provider => FirestoreDb.Create(builder.Configuration["Firebase:ProjectId"]));
 builder.Services.AddSingleton(FirebaseApp.Create());
-builder.Services.AddSingleton(provider =>
-{
-    return StorageClient.Create();
-});
+builder.Services.AddSingleton(provider => StorageClient.Create());
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
 builder.Services.AddServiceCollection();
-builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddAuthServices(builder.Configuration);
 builder.Services.AddSwaggerDocumentation();
 
 builder
@@ -44,17 +38,11 @@ builder
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
-
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseHttpsRedirection();
-
 app.UseRouting();
-
 app.UseCors("CorsPolicy");
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>

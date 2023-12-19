@@ -7,8 +7,8 @@ namespace Core.Interfaces;
 
 public interface IPostService
 {
-    public Task<Pagination<PostDto>> GetPosts(GeneralSpecParams generalSpecParams);
-    public Task<PostDto> GetPostById(string id);
+    public Task<Pagination<Post>> GetPosts(GeneralSpecParams generalSpecParams);
+    public Task<Post> GetPostById(string id);
     public Task<Post> AddPost(PostRequestDto postForm);
 
     public Task<IEnumerable<Post>> GetAllChildPost(string threadId);

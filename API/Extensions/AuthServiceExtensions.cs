@@ -7,27 +7,15 @@ namespace API.Extensions;
 
 public static class AuthServiceExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration config)
     {
-        ConfigureIdentityStores(services, config);
+        ConfigureFirebaseAuth(services, config);
         ConfigureJwtAuthentication(services, config);
         return services;
     }
 
-    // private static void ConfigureIdentityOptions(IServiceCollection services)
-    // {
-    //     services.AddIdentityCore<AppUser>(opt =>
-    //     {
-    //         opt.Password.RequireDigit = true;
-    //         opt.Password.RequireLowercase = true;
-    //         opt.Password.RequireUppercase = true;
-    //         opt.Password.RequireNonAlphanumeric = true;
-    //         opt.Password.RequiredLength = 8;
-    //         opt.Password.RequiredUniqueChars = 1;
-    //     });
-    // }
 
-    private static void ConfigureIdentityStores(IServiceCollection services, IConfiguration config)
+    private static void ConfigureFirebaseAuth(IServiceCollection services, IConfiguration config)
     {
         var firebaseProjectName = config["Firebase:ProjectName"];
         services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig

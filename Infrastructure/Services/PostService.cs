@@ -1,5 +1,6 @@
 using API.Dtos;
 using AutoMapper;
+using Core.Documents;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
@@ -11,11 +12,11 @@ public class PostService : IPostService
 {
     private readonly IBoardService _boardService;
     private readonly IMapper _mapper;
-    private readonly IGenericRepository<Post> _postsRepo;
+    private readonly IGenericRepository<PostDocument> _postsRepo;
     private readonly IUserService _userService;
 
     public PostService(
-        IGenericRepository<Post> postsRepo,
+        IGenericRepository<PostDocument> postsRepo,
         IMapper mapper,
         IBoardService boardService,
         IUserService userService
@@ -27,7 +28,7 @@ public class PostService : IPostService
         _userService = userService;
     }
 
-    public async Task<Pagination<PostDto>> GetPosts(GeneralSpecParams generalSpecParams)
+    public async Task<Pagination<Post>> GetPosts(GeneralSpecParams generalSpecParams)
     {
         try
         {
@@ -35,9 +36,9 @@ public class PostService : IPostService
             var countSpec = new PostWithFiltersForCountSpecification(generalSpecParams);
             var totalPosts = await _postsRepo.CountAsync(countSpec);
             var posts = await _postsRepo.ListAsync(spec);
-            var data = _mapper.Map<IReadOnlyList<Post>, IReadOnlyList<PostDto>>(posts);
+            var data = _mapper.Map<IReadOnlyList<Post>>(posts);
 
-            return new Pagination<PostDto>(generalSpecParams.PageIndex, generalSpecParams.PageSize, totalPosts, data);
+            return new Pagination<Post>(generalSpecParams.PageIndex, generalSpecParams.PageSize, totalPosts, data);
         }
         catch (Exception e)
         {
@@ -59,7 +60,7 @@ public class PostService : IPostService
                 Author = postForm.UserId,
                 Board = postForm.BoardId
             };
-            _postsRepo.Add(newPost);
+            _postsRepo.Add(_mapper.Map<PostDocument>(newPost));
             _userService.AddPostToUser(postForm.UserId, postForm.Id);
             return newPost;
         }
@@ -73,27 +74,7 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<Post>> GetAllChildPost(string postId)
     {
-        try
-        {
-            var childPosts = await _postsRepo.ListAsync(new PostWithChildAndParentPostsSpeciffication(postId));
-
-            var descendantTasks = childPosts.Select(childPost =>
-                Task.Run(async () =>
-                {
-                    var descendants = await GetAllChildPost(childPost.Id);
-                    return new List<Post> { childPost }.Concat(descendants);
-                })
-            );
-
-            var descendantPostLists = await Task.WhenAll(descendantTasks);
-
-            return descendantPostLists.SelectMany(postList => postList).ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Error fetching all child posts: {ex.Message}");
-            throw;
-        }
+        throw new NotImplementedException();
     }
 
     public async Task DeletePost(string id)
@@ -128,7 +109,7 @@ public class PostService : IPostService
                 ParentId = postId
             };
 
-            _postsRepo.Add(commentPost);
+            _postsRepo.Add(_mapper.Map<PostDocument>(commentPost));
 
             originalPost.Children.Add(commentPost.Id);
 
@@ -143,12 +124,12 @@ public class PostService : IPostService
     }
 
 
-    public async Task<PostDto> GetPostById(string id)
+    public async Task<Post> GetPostById(string id)
     {
         var spec = new PostWithBoardAndUserSpecifications(id);
 
         var post = await _postsRepo.GetEntityWithSpec(spec);
 
-        return _mapper.Map<Post, PostDto>(post);
+        return _mapper.Map<Post>(post);
     }
 }

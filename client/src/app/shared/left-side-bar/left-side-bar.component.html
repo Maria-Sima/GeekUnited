@@ -10,7 +10,7 @@
   </div>
 
   <div class="mt-10 px-6">
-    <div *ngIf="authService.isAuthenticated()">
+    <div *ngIf="(authService.isLoggedIn$ | async)">
       <div (click)="signOut()" class="flex cursor-pointer gap-4 p-4">
         <img alt="logout" height="24" src="/src/assets/logout.svg" width="24"/>
         <p class="text-light-2 max-lg:hidden">Logout</p>

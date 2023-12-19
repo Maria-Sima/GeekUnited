@@ -1,8 +1,8 @@
-using Core.Entities;
+using Core.Documents;
 
 namespace Core.Specifications;
 
-public class PostWithFiltersForCountSpecification : BaseSpecification<Post>
+public class PostWithFiltersForCountSpecification : BaseSpecification<PostDocument>
 {
     public PostWithFiltersForCountSpecification(GeneralSpecParams generalSpecParams)
         : base(

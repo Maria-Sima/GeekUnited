@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { sidebarLinks } from '../../utils/constants';
-import { AccountService } from '../../auth/account.service';
+import { AuthService } from '../../auth/auth.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -14,7 +14,7 @@ export class LeftSideBarComponent {
 
   constructor(
     private router: Router,
-    private accountService: AccountService,
+    public authService: AuthService,
   ) {}
 
   isActive(route: string): boolean {
@@ -23,12 +23,12 @@ export class LeftSideBarComponent {
   }
 
   navigateToProfile(): void {
-    const userId = this.accountService.currentUser$.pipe(map((user) => user?.id));
+    const userId = this.authService.currentUser$.pipe(map((user) => user?.id));
     this.router.navigate(['/profile', userId]);
   }
 
   signOut(): void {
-    this.accountService.logout();
+    this.authService.logout();
     this.router.navigate(['/sign-in']);
   }
 }

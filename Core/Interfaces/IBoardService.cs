@@ -1,12 +1,20 @@
 using Core.Entities;
 using Core.Specifications;
+using Microsoft.AspNetCore.Http;
 using Utilities.Helpers;
 
 namespace Core.Interfaces;
 
 public interface IBoardService
 {
-    public Task<Board> CreateBoard(string id, string name, string username, string image, string bio, string createdById);
+    public Task<Board> CreateBoard(
+        string id,
+        string name,
+        string username,
+        IFormFile image,
+        string bio,
+        string createdById
+    );
 
     public Task<Board> AddMembersToBoard(string userId, string boardId);
 
@@ -19,6 +27,6 @@ public interface IBoardService
 
     public Task DeleteBoard(string boardId);
     public void AddPostToBoard(Board board, string postId);
-    public Task UpdateBoardInfo(string boardId, string name, string username, string image);
+    public Task UpdateBoardInfo(string boardId, string name, string username, IFormFile image);
     public Task<Board> GetBoardById(string boardId);
 }

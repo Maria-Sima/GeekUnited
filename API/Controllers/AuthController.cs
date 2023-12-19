@@ -1,5 +1,6 @@
 using API.Dtos;
 using API.Errors;
+using Core.Entities;
 using Core.Interfaces;
 using Firebase.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -18,9 +19,18 @@ public class AuthController : BaseApiController
 
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<User>> GetCurrentUser()
+    public async Task<ActionResult<AppUser>> GetCurrentUser()
     {
-        var user = _authService.GetCurrentUser();
+        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var user = await _authService.GetCurrentUser(token);
+        return Ok(user);
+    }
+
+    [Authorize]
+    [HttpGet("user")]
+    public async Task<ActionResult<User>> GetUser()
+    {
+        var user = _authService.GetUser();
         return Ok(user);
     }
 

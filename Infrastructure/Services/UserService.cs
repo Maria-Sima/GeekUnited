@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using API.Dtos;
 using AutoMapper;
+using Core.Documents;
 using Core.Entities;
 using Core.Interfaces;
 
@@ -8,47 +8,41 @@ namespace Infrastructure.Services;
 
 public class UserService : IUserService
 {
+    private readonly string _bucketName;
+    private readonly IFileService _fileService;
     private readonly IMapper _mapper;
-    private readonly IGenericRepository<AppUser> _userRepo;
+    private readonly IGenericRepository<UserDocument> _userRepo;
 
 
     public UserService(
-        IGenericRepository<AppUser> userRepo,
-        IMapper mapper
+        IGenericRepository<UserDocument> userRepo,
+        IMapper mapper,
+        IFileService fileService
     )
     {
         _userRepo = userRepo;
         _mapper = mapper;
+        _fileService = fileService;
+        _bucketName = "users";
     }
 
-    public AppUser CreateUser(NewUserRequest userRequest)
+    public void CreateNewUser(string userId, string email)
     {
-        try
+        var newUser = new AppUser
         {
-            AppUser newUser = new AppUser
-            {
-                Name = userRequest.Name,
-                Bio = userRequest.Bio,
-                Username = userRequest.Username,
-                ProfilePhoto = userRequest.ProfilePhoto
-            };
-             _userRepo.Add(newUser);
-             return newUser;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-        
+            Id = userId,
+            Email = email
+        };
+        Console.WriteLine(newUser.Id);
+        var userDocument = _mapper.Map<UserDocument>(newUser);
+        Console.WriteLine(userDocument.Id);
+        _userRepo.Add(userDocument);
     }
+
     public Task<List<Post>> GetActivity(string userId)
     {
         throw new NotImplementedException();
     }
-
-
-
 
 
     public Task<CommentDto> AddComment(CommentRequestDto comm)
@@ -84,7 +78,7 @@ public class UserService : IUserService
     {
         var user = await _userRepo.GetByIdAsync(id);
 
-        return user;
+        return _mapper.Map<AppUser>(user);
     }
 
     public Task<List<Post>> GerUserPosts(string userId)
@@ -105,5 +99,25 @@ public class UserService : IUserService
         await _userRepo.UpdateAsync(user);
     }
 
-
+    public async Task<AppUser> OnboardUser(NewUserRequest userRequest)
+    {
+        try
+        {
+            var registeredUser = await GetUserById(userRequest.UserID) ?? throw new Exception("User not found");
+            var photoUri = await _fileService.UploadFile(userRequest.Username, userRequest.ProfilePhoto, _bucketName);
+            registeredUser.Name = userRequest.Name;
+            registeredUser.Bio = userRequest.Bio;
+            registeredUser.Username = userRequest.Username;
+            registeredUser.ProfilePhoto = photoUri;
+            registeredUser.Onboarded = true;
+            var userDocument = _mapper.Map<UserDocument>(registeredUser);
+            await _userRepo.UpdateAsync(userDocument);
+            return registeredUser;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountService } from '../../../auth/account.service';
+import { AuthService } from '../../../auth/auth.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-activity',
@@ -12,22 +13,26 @@ export class ActivityComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AccountService,
+    private authService: AuthService,
+    private userService: UserService,
   ) {}
 
   async ngOnInit() {
-    const user = await this.authService.currentUser$;
-    if (!user) {
-      return;
-    }
+    await this.authService.currentUser$.subscribe(async (userInfo) => {
+      if (!userInfo || userInfo.onboarded) {
+        this.router.navigate(['/']);
+        return;
+      }
 
-    const userInfo = await fetchUser(user.id);
-    if (!userInfo?.onboarded) {
-      this.redirect('/onboarding');
-      return;
-    }
+      if (!userInfo.onboarded) {
+        this.redirect('/onboarding');
+        return;
+      }
 
-    this.activity = await getActivity(userInfo._id);
+      await this.userService.getActivity(userInfo.id).subscribe((response) => {
+        this.activity = response;
+      });
+    });
   }
 
   redirectToThread(parentId: string) {

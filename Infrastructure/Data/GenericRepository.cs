@@ -1,4 +1,4 @@
-using Core.Entities;
+using Core.Documents;
 using Core.Interfaces;
 using Core.Specifications;
 using Google.Cloud.Firestore;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Data;
 
 public class GenericRepository<T> : IGenericRepository<T>
-    where T : BaseEntity
+    where T : BaseDocument
 {
     private readonly FirestoreDb _firestoreDb;
 
@@ -23,7 +23,7 @@ public class GenericRepository<T> : IGenericRepository<T>
             .Document(id)
             .GetSnapshotAsync();
 
-        // Map Firestore document to your entity
+
         return documentSnapshot.ConvertTo<T>();
     }
 
@@ -33,7 +33,7 @@ public class GenericRepository<T> : IGenericRepository<T>
             .Collection(typeof(T).Name)
             .GetSnapshotAsync();
 
-        // Map Firestore documents to your entities
+
         return query.Documents.Select(doc => doc.ConvertTo<T>()).ToList();
     }
 

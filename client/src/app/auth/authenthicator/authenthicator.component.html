@@ -3,16 +3,17 @@
     <mat-card-header>
       <mat-card-title>{{getStateText()}}</mat-card-title>
     </mat-card-header>
-<app-login *ngIf="isLoginState()"></app-login>
-<app-register *ngIf="isRegisterState()" ></app-register>
-    <div class="" *ngIf="isForgotPasswordState()">
-      <app-form-input formControlName="email" [label]="'Email Address'" [type]="'email'"></app-form-input>
-      <button  mat-flat-button color="warn">Send Email</button>
+    <app-sign-in *ngIf="isLoginState()"></app-sign-in>
+    <app-sign-up *ngIf="isRegisterState()"></app-sign-up>
+    <div *ngIf="isForgotPasswordState()" class="">
+      <app-form-input [label]="'Email Address'" [type]="'email'"
+                      formControlName="email"></app-form-input>
+      <button color="warn" mat-flat-button>Send Email</button>
     </div>
     <mat-card-actions align="end">
-      <button mat-flat-button (click)="onForgotPassword()">Forgot Password</button>
-      <button mat-flat-button (click)="onCreateAccount()">Create an Account</button>
-      <button mat-flat-button (click)="onSignIn()">Login</button>
+      <button (click)="onForgotPassword()" mat-flat-button>Forgot Password</button>
+      <button (click)="onCreateAccount()" mat-flat-button>Create an Account</button>
+      <button (click)="onSignIn()" mat-flat-button>Login</button>
     </mat-card-actions>
   </mat-card>
 </div>

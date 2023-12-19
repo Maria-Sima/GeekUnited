@@ -8,10 +8,20 @@ import { AuthModule } from './auth/auth.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { ActivityModule } from './pages/activity/activity.module';
 import { CoreModule } from './core/core.module';
+import { ServicesModule } from './services/services.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [SharedModule, RouterOutlet, ActivityModule, AuthModule, BrowserModule, RouterModule, CoreModule],
+  imports: [
+    SharedModule,
+    RouterOutlet,
+    ActivityModule,
+    AuthModule,
+    BrowserModule,
+    RouterModule,
+    CoreModule,
+    ServicesModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

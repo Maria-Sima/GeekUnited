@@ -1,8 +1,8 @@
-using Core.Entities;
+using Core.Documents;
 
 namespace Core.Specifications;
 
-public class BoardWithMembersSpecification : BaseSpecification<Board>
+public class BoardWithMembersSpecification : BaseSpecification<BoardDocument>
 {
     public BoardWithMembersSpecification(string id)
         : base(x => x.Id == id)

@@ -1,8 +1,8 @@
-using Core.Entities;
+using Core.Documents;
 
 namespace Core.Specifications;
 
-public class PostWithBoardAndUserSpecifications : BaseSpecification<Post>
+public class PostWithBoardAndUserSpecifications : BaseSpecification<PostDocument>
 {
     public PostWithBoardAndUserSpecifications(GeneralSpecParams generalParams)
         : base(

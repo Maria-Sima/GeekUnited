@@ -1,10 +1,10 @@
-using Core.Entities;
+using Core.Documents;
 using Core.Specifications;
 
 namespace Core.Interfaces;
 
 public interface IGenericRepository<T>
-    where T : BaseEntity
+    where T : BaseDocument
 {
     Task<T> GetByIdAsync(string id);
     Task<IReadOnlyList<T>> ListAllAsync();

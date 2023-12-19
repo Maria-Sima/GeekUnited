@@ -1,50 +1,46 @@
-import {Component, OnInit} from '@angular/core';
-import {AsyncValidatorFn, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AccountService} from "../account.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {map, of, switchMap, timer} from "rxjs";
-import {AuthenthicatorCompState} from "./AuthenthicatorCompState";
+import { Component } from '@angular/core';
+import { AuthenthicatorCompState } from './AuthenthicatorCompState';
 
 @Component({
   selector: 'app-authenthicator',
   templateUrl: './authenthicator.component.html',
-  styleUrls: ['./authenthicator.component.scss']
+  styleUrls: ['./authenthicator.component.scss'],
 })
 export class AuthenthicatorComponent {
-
-  state=AuthenthicatorCompState.LOGIN;
-
+  state = AuthenthicatorCompState.LOGIN;
 
   getStateText() {
     switch (this.state) {
       case AuthenthicatorCompState.FORGOT_PASSWORD:
-        return "Forgot your password?";
+        return 'Forgot your password?';
       case AuthenthicatorCompState.REGISTER:
-        return "New here";
+        return 'New here';
       case AuthenthicatorCompState.LOGIN:
-        return "Sign In"
+        return 'Sign In';
     }
   }
 
-    onSignIn() {
-      this.state=AuthenthicatorCompState.LOGIN;
-    }
+  onSignIn() {
+    this.state = AuthenthicatorCompState.LOGIN;
+  }
+
   onForgotPassword() {
-    this.state=AuthenthicatorCompState.FORGOT_PASSWORD;
+    this.state = AuthenthicatorCompState.FORGOT_PASSWORD;
   }
-    onCreateAccount() {
-      this.state=AuthenthicatorCompState.REGISTER;
-    }
 
-    isLoginState(){
-      return this.state==AuthenthicatorCompState.LOGIN;
-    }
+  onCreateAccount() {
+    this.state = AuthenthicatorCompState.REGISTER;
+  }
 
-    isRegisterState(){
-      return this.state==AuthenthicatorCompState.REGISTER;
-    }
+  isLoginState() {
+    return this.state == AuthenthicatorCompState.LOGIN;
+  }
 
-    isForgotPasswordState(){
-      return this.state==AuthenthicatorCompState.FORGOT_PASSWORD;
-    }
+  isRegisterState() {
+    return this.state == AuthenthicatorCompState.REGISTER;
+  }
+
+  isForgotPasswordState() {
+    return this.state == AuthenthicatorCompState.FORGOT_PASSWORD;
+  }
 }

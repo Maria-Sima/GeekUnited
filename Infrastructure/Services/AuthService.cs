@@ -1,5 +1,7 @@
+using Core.Entities;
 using Core.Interfaces;
 using Firebase.Auth;
+using FirebaseAdmin.Auth;
 
 namespace Infrastructure.Services;
 
@@ -7,17 +9,30 @@ public class AuthService : IAuthService
 
 {
     private readonly FirebaseAuthClient _firebaseAuth;
+    private readonly IUserService _userService;
 
 
-    public AuthService(FirebaseAuthClient firebaseAuth)
+    public AuthService(FirebaseAuthClient firebaseAuth, IUserService userService)
     {
         _firebaseAuth = firebaseAuth;
+        _userService = userService;
     }
 
     public async Task<string?> SignUp(string email, string password)
     {
-        var userCredentials = await _firebaseAuth.CreateUserWithEmailAndPasswordAsync(email, password);
-        return userCredentials is null ? null : await userCredentials.User.GetIdTokenAsync();
+        try
+        {
+            var userCredentials = await _firebaseAuth.CreateUserWithEmailAndPasswordAsync(email, password);
+
+            _userService.CreateNewUser(userCredentials.User.Uid, email);
+
+            return await userCredentials.User.GetIdTokenAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task<string?> Login(string email, string password)
@@ -40,17 +55,24 @@ public class AuthService : IAuthService
     }
 
 
-    public User GetCurrentUser()
+    public async Task<AppUser> GetCurrentUser(string token)
     {
         try
         {
-            return _firebaseAuth.User;
+            var decodedToken = FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
+            var user = await _userService.GetUserById(decodedToken.Result.Uid);
+            return user;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
+    }
+
+    public User GetUser()
+    {
+        return _firebaseAuth.User;
     }
 
 
