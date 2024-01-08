@@ -1,0 +1,28 @@
+<h1 class="head-text">Communities</h1>
+
+<div class="mt-5">
+  <app-search-bar>routeType="communities"></app-search-bar>
+</div>
+
+<section class="mt-9 flex flex-wrap gap-4">
+  <ng-container *ngIf="result?.boards.length > 0; else noResult">
+    <app-board-card
+      *ngFor="let board of result."
+      [bio]="board.bio"
+      [id]="board.id"
+      [imgUrl]="board.image"
+      [members]="board.members"
+      [name]="board.name"
+      [username]="board.username"
+    ></app-board-card>
+  </ng-container>
+  <ng-template #noResult>
+    <p class="no-result">No Result</p>
+  </ng-template>
+</section>
+
+<app-pagination
+  [isNext]="result?.isNext"
+  [pageNumber]="result?.pageNumber || 1"
+  [path]="'boards'"
+></app-pagination>

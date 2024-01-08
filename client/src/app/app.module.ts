@@ -4,9 +4,9 @@ import { SharedModule } from './shared/shared.module';
 
 import { RouterModule, RouterOutlet } from '@angular/router';
 
-import { AuthModule } from './auth/auth.module';
+import { AccountModule } from './account/account.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { ActivityModule } from './pages/activity/activity.module';
+import { ActivityModule } from './activity/activity.module';
 import { CoreModule } from './core/core.module';
 import { ServicesModule } from './services/services.module';
 
@@ -16,7 +16,7 @@ import { ServicesModule } from './services/services.module';
     SharedModule,
     RouterOutlet,
     ActivityModule,
-    AuthModule,
+    AccountModule,
     BrowserModule,
     RouterModule,
     CoreModule,

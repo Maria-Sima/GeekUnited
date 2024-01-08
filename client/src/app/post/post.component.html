@@ -1,0 +1,37 @@
+<section class='relative'>
+  <div>
+    <app-posts-card
+      [author]='post.author'
+      [comments]='post.children'
+      [community]='post.board'
+      [content]='post.text'
+      [createdAt]='post.createdAt'
+      [currentUserId]='user.id'
+      [id]='post.id'
+      [parentId]='post.parentId'
+    ></app-posts-card>
+  </div>
+
+  <div class='mt-7'>
+    <app-comment
+      [currentUserId]='userInfo.id'
+      [currentUserImg]='user.imageUrl'
+      [threadId]='params.id'
+    ></app-comment>
+  </div>
+
+  <div class='mt-10'>
+    <ng-container *ngFor='let childItem of post.children'>
+      <app-posts-card [author]='childItem.author'
+                      [comments]='childItem.children'
+                      [community]='childItem.community'
+                      [content]='childItem.text'
+                      [createdAt]='childItem.createdAt'
+                      [currentUserId]='user.id'
+                      [id]='childItem._id'
+                      [isComment]='true'
+                      [parentId]='childItem.parentId'
+      ></app-posts-card>
+    </ng-container>
+  </div>
+</section>

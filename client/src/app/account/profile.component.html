@@ -1,0 +1,16 @@
+<section>
+  <app-profile-header
+    *ngIf="(userInfo$ | async) as userInfo"
+    [accountId]="userInfo?.id"
+    [bio]="userInfo?.bio"
+    [imgUrl]="userInfo?.image"
+    [name]="userInfo?.name"
+    [username]="userInfo?.userName"
+  ></app-profile-header>
+
+  <div class="mt-9">
+    <ng-container *ngIf="(userInfo$ | async) as userInfo">
+
+    </ng-container>
+  </div>
+</section>

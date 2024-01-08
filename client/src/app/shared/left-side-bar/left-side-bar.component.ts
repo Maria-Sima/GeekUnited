@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { sidebarLinks } from '../../utils/constants';
-import { AuthService } from '../../auth/auth.service';
+import { AccountService } from '../../account/account.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -14,7 +14,7 @@ export class LeftSideBarComponent {
 
   constructor(
     private router: Router,
-    public authService: AuthService,
+    public authService: AccountService,
   ) {}
 
   isActive(route: string): boolean {
